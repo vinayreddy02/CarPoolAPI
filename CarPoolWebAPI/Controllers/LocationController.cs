@@ -10,7 +10,7 @@ using CarPoolApplication.Services.Intefaces;
 
 namespace CarPoolWebAPI.Controllers
 {
-    [Route("api/[controller]")]
+   
     [ApiController]
     public class LocationController : ControllerBase
     {
@@ -21,12 +21,14 @@ namespace CarPoolWebAPI.Controllers
         }
         // GET: api/Location
         [HttpGet]
+        [Route("api/[controller]/GetLocations")]
         public List<Location> GetLocations()
         {
             return locationServices.GetAll();
         }
         // POST: api/Location
         [HttpPost]
+        [Route("api/[controller]")]
         public bool PostLocation(Location location)
         {
             if (locationServices.AddLocation(location))
@@ -40,13 +42,15 @@ namespace CarPoolWebAPI.Controllers
 
         }
         // GET: api/Location/5
-        [HttpGet("{id}")]
+        [HttpGet]
+        [Route("api/[controller]/{id}")]
         public Location GetLocation(string id)
         {
             return locationServices.GetLocation(id);
         }
         // DELETE: api/Location/5
-        [HttpDelete("{id}")]
+        [HttpDelete]
+        [Route("api/[controller]/{id}")]
         public bool DeleteLocation(string id)
         {
             if (locationServices.DeleteLocation(id))
@@ -59,7 +63,8 @@ namespace CarPoolWebAPI.Controllers
             }
         }
         // PUT: api/Location/5
-        [HttpPut("{id}")]
+        [HttpPut]
+        [Route("api/[controller]/{id}")]
         public string PutLocation(string id, Location location)
         {
             if (id != location.Id)
@@ -79,7 +84,8 @@ namespace CarPoolWebAPI.Controllers
             }
         }
         // GET: api/Location/place
-        [HttpGet("{place}")]
+        [HttpGet]
+        [Route("api/[controller]/{place}")]
         public List<Location> GetLocationsWithName(string place)
         {
             return locationServices.GetLocations(place);

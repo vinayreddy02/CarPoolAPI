@@ -94,7 +94,7 @@ namespace CarPoolApplication.Services
         }
         public bool IsValidUser(string Id, string password)
         {
-            return Context.UserTable.Any(user => string.Equals(user.Id, Id) && string.Equals(user.Id, password));
+            return Context.UserTable.Any(user => string.Equals(user.Id, Id) && string.Equals(user.Password, password));
         }
         public bool UserExists(string userID)
         {

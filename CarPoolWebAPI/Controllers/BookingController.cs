@@ -10,7 +10,7 @@ using CarPoolApplication.Services.Intefaces;
 
 namespace CarPoolWebAPI.Controllers
 {
-    [Route("api/[controller]")]
+   
     [ApiController]
     public class BookingController : ControllerBase
     {
@@ -19,15 +19,18 @@ namespace CarPoolWebAPI.Controllers
         {
             BookingServices = services;
         }
-        // GET: api/Bookings
+        // GET: api/Booking/GetBookings
+        
         [HttpGet]
+        [Route("api/[controller]/GetBookings")]
         public List<Booking> GetBookings()
         {
             return BookingServices.GetAll();
         }
-        // POST: api/Bookings
+        // POST: api/Booking/PostBooking
         [HttpPost]
-        public bool PostUser(Booking booking)
+        [Route("api/[controller]")]
+        public bool PostBooking(Booking booking)
         {
             if (BookingServices.AddRequest(booking))
             {
@@ -39,14 +42,16 @@ namespace CarPoolWebAPI.Controllers
             }
 
         }
-        // GET: api/Bookings/5
-        [HttpGet("{id}")]
+        // GET: api/Booking/GetBooking/id
+        [HttpGet]
+        [Route("api/[controller]/{id}")]
         public Booking GetBooking(string id)
         {
             return BookingServices.GetBooking(id);
         }
-        // DELETE: api/Bookings/5
-        [HttpDelete("{id}")]
+        // DELETE: api/Booking/DeleteBooking/id
+        [HttpDelete]
+        [Route("api/[controller]/{id}")]
         public bool DeleteBooking(string id)
         {
             if (BookingServices.DeleteBooking(id))
@@ -58,8 +63,9 @@ namespace CarPoolWebAPI.Controllers
                 return false;
             }
         }
-        // PUT: api/Booking/5
-        [HttpPut("{id}")]
+        // PUT: api/Booking/PutBooking/id
+        [HttpPut]
+        [Route("api/[controller]/{id}")]
         public string PutBooking(string id, Booking booking)
         {
             if (id != booking.Id)
@@ -80,24 +86,28 @@ namespace CarPoolWebAPI.Controllers
         }
         // GET: api/Bookings/GetBookingsWithUserId
         [HttpGet]
+        [Route("api/[controller]/GetBookingsWithUserId/{userId}")]
         public List<Booking> GetBookingsWithUserId(string userId)
         {
             return BookingServices.GetAllbookings(userId);
         }
         // GET: api/Bookings/GetAllRidesToStart
         [HttpGet]
+        [Route("api/[controller]/GetAllRidesToStart/{offerId}")]
         public List<Booking> GetAllRidesToStart(string offerId)
         {
             return BookingServices.GetAllRidesToStart(offerId);
         }
         // GET: api/Bookings/GetRequests
         [HttpGet]
+        [Route("api/[controller]/GetRequests/{offerId}")]
         public List<Booking> GetRequests(string offerId)
         {
             return BookingServices.GetRequests(offerId);
         }
         // GET: api/Bookings/StartRides
         [HttpGet]
+        [Route("api/[controller]/StartRides/{offerId}")]
         public bool StartRides(string offerId)
         {
             if (BookingServices.StartRides(offerId))
@@ -111,6 +121,7 @@ namespace CarPoolWebAPI.Controllers
         }
         // GET: api/Bookings/EndRides
         [HttpGet]
+        [Route("api/[controller]/EndRides/{offerId}")]
         public bool EndRides(string offerId)
         {
             if (BookingServices.EndRides(offerId))
@@ -124,6 +135,7 @@ namespace CarPoolWebAPI.Controllers
         }
         // GET: api/Bookings/CancelRides
         [HttpGet]
+        [Route("api/[controller]/CancelRides/{offerId}")]
         public bool CancelRides(string offerId)
         {
             if (BookingServices.CancelRides(offerId))
@@ -137,9 +149,10 @@ namespace CarPoolWebAPI.Controllers
         }
         // GET: api/Bookings/ApproveRequests
         [HttpGet]
-        public bool ApproveRequests(string requestID, string offerID)
+        [Route("api/[controller]/requestId/Offer/{offerId}")]
+        public bool ApproveRequests(string requestId, string offerId)
         {
-            if (BookingServices.ApproveRequests(requestID, offerID))
+            if (BookingServices.ApproveRequests(requestId, offerId))
             {
                 return true;
             }

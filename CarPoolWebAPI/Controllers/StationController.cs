@@ -10,7 +10,7 @@ using CarPoolApplication.Services.Intefaces;
 
 namespace CarPoolWebAPI.Controllers
 {
-    [Route("api/[controller]")]
+   
     [ApiController]
     public class StationController : ControllerBase
     {
@@ -19,14 +19,16 @@ namespace CarPoolWebAPI.Controllers
         {
             stationServices = services;
         }
-        // GET: api/Stations
+        // GET: api/Station
         [HttpGet]
+        [Route("api/[controller]")]
         public List<Station> GetAll()
         {
             return stationServices.GetAll();
         }
-        // POST: api/Stations
+        // POST: api/Station
         [HttpPost]
+        [Route("api/[controller]")]
         public bool PostStation(Station station)
         {
             if (stationServices.AddStation(station))
@@ -39,14 +41,16 @@ namespace CarPoolWebAPI.Controllers
             }
 
         }
-        // GET: api/Stations/5
-        [HttpGet("{id}")]
+        // GET: api/Station/5
+        [HttpGet]
+        [Route("api/[controller]/{id}")]
         public Station GetStation(string id)
         {
             return stationServices.GetStation(id);
         }
-        // DELETE: api/Stations/5
-        [HttpDelete("{id}")]
+        // DELETE: api/Station/5
+        [HttpDelete]
+        [Route("api/[controller]/{id}")]
         public bool DeleteStation(string id)
         {
             if (stationServices.DeleteStation(id))
@@ -59,7 +63,8 @@ namespace CarPoolWebAPI.Controllers
             }
         }
         // PUT: api/Station/5
-        [HttpPut("{id}")]
+        [HttpPut]
+        [Route("api/[controller]/{id}")]
         public string PutStation(string id, Station station)
         {
             if (id != station.Id)
@@ -78,15 +83,19 @@ namespace CarPoolWebAPI.Controllers
                 }
             }
         }
-        [HttpGet("{locationid}")]
+        // GET: api/Station/GetStationsUsingLocationId
+        [HttpGet]
+        [Route("api/[controller]/GetStationsUsingLocationId/{locationId}")]
         public List<Station> GetStationsUsingLocationId(string locationId)
         {
             return stationServices.GetStations(locationId);
         }
-        [HttpGet("{offerid}")]
-        public List<Station> GetStationsusingOfferId(string offerid)
+        // GET: api/Station/GetStationsusingOfferId
+        [HttpGet]
+        [Route("api/[controller]/GetStationsUsingOfferId/{offerId}")]
+        public List<Station> GetStationsUsingOfferId(string offerId)
         {
-            return stationServices.GetStationsUsingOfferID(offerid);
+            return stationServices.GetStationsUsingOfferID(offerId);
         }
     }
 }

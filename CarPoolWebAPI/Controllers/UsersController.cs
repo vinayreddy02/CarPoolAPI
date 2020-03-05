@@ -10,7 +10,7 @@ using CarPoolApplication.Services.Intefaces;
 
 namespace CarPoolWebAPI.Controllers
 {
-    [Route("api/[controller]")]
+    
     [ApiController]
     public class UsersController : ControllerBase
     {
@@ -21,12 +21,14 @@ namespace CarPoolWebAPI.Controllers
         }
         // GET: api/Users
         [HttpGet]
+        [Route("api/[controller]")]
         public List<User> GetUsers()
         {
             return UserServices.GetAll();
         }
         // POST: api/Users
         [HttpPost]
+        [Route("api/[controller]")]
         public bool PostUser(User user)
         {
             if (UserServices.AddUser(user))
@@ -39,13 +41,15 @@ namespace CarPoolWebAPI.Controllers
             }
         }
         // GET: api/Users/5
-        [HttpGet("{id}")]
+        [HttpGet]
+        [Route("api/[controller]/{id}")]
         public User GetUser(string id)
         {
             return UserServices.GetUser(id);
         }
         // DELETE: api/Users/5
-        [HttpDelete("{id}")]
+        [HttpDelete]
+        [Route("api/[controller]/{id}")]
         public bool DeleteUser(string id)
         {
             if (UserServices.DeleteUser(id))
@@ -58,7 +62,8 @@ namespace CarPoolWebAPI.Controllers
             }
         }
         // PUT: api/Users/5
-        [HttpPut("{id}")]
+        [HttpPut]
+        [Route("api/[controller]/{id}")]
         public string PutUser(string id, User user)
         {
             if (id != user.Id)
@@ -79,7 +84,7 @@ namespace CarPoolWebAPI.Controllers
         }
         // POST: api/Users
         [HttpGet]
-        [Route("api/[controller]/IsValidUser")]
+        [Route("api/[controller]/IsvalidUser/{id}/{password}")]
         public bool IsValidUser(string id, string password)
         {
             if(UserServices.IsValidUser(id, password))

@@ -14,8 +14,8 @@ namespace CarPoolWebAPI.Controllers
     [ApiController]
     public class VehicleController : ControllerBase
     {
-        readonly VehicleServices vehicleServices;
-        public VehicleController(VehicleServices services)
+         IVehicleServices vehicleServices;
+        public VehicleController(IVehicleServices services)
         {
             vehicleServices = services;
         }
