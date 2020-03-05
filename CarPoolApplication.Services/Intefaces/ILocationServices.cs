@@ -12,5 +12,6 @@ namespace CarPoolApplication.Services.Intefaces
         public List<Location> GetAll();
         public bool DeleteLocation(string LocationID);
         public Location GetLocation(string LocationID);
+        public bool UpdateLocation(Location place);
     }
 }

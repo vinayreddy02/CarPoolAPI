@@ -14,7 +14,7 @@ namespace CarPoolWebAPI.Controllers
     [ApiController]
     public class UsersController : ControllerBase
     {
-        IUserServices UserServices;
+        readonly IUserServices UserServices;
         public UsersController(IUserServices services)
         {
             UserServices = services;
@@ -27,7 +27,6 @@ namespace CarPoolWebAPI.Controllers
         }
         // POST: api/Users
         [HttpPost]
-       
         public bool PostUser(User user)
         {
             if (UserServices.AddUser(user))
@@ -38,7 +37,6 @@ namespace CarPoolWebAPI.Controllers
             {
                 return false;
             }
-
         }
         // GET: api/Users/5
         [HttpGet("{id}")]
@@ -59,7 +57,39 @@ namespace CarPoolWebAPI.Controllers
                 return false;
             }
         }
-
-
+        // PUT: api/Users/5
+        [HttpPut("{id}")]
+        public string PutUser(string id, User user)
+        {
+            if (id != user.Id)
+            {
+                return "user does not exists";
+            }
+            else
+            {
+                if (UserServices.UpdateUser(user))
+                {
+                    return "updated";
+                }
+                else
+                {
+                    return "Update failed";
+                }
+            }
+        }
+        // POST: api/Users
+        [HttpGet]
+        [Route("api/[controller]/IsValidUser")]
+        public bool IsValidUser(string id, string password)
+        {
+            if(UserServices.IsValidUser(id, password))
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
     }
 }

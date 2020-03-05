@@ -14,18 +14,18 @@ namespace CarPoolWebAPI.Controllers
     [ApiController]
     public class LocationController : ControllerBase
     {
-        ILocationServices locationServices;
+        readonly ILocationServices locationServices;
         public LocationController(ILocationServices services)
         {
             locationServices = services;
         }
-        // GET: api/location
+        // GET: api/Location
         [HttpGet]
         public List<Location> GetLocations()
         {
             return locationServices.GetAll();
         }
-        // POST: api/location
+        // POST: api/Location
         [HttpPost]
         public bool PostLocation(Location location)
         {
@@ -39,13 +39,13 @@ namespace CarPoolWebAPI.Controllers
             }
 
         }
-        // GET: api/location/5
+        // GET: api/Location/5
         [HttpGet("{id}")]
         public Location GetLocation(string id)
         {
             return locationServices.GetLocation(id);
         }
-        // DELETE: api/location/5
+        // DELETE: api/Location/5
         [HttpDelete("{id}")]
         public bool DeleteLocation(string id)
         {
@@ -57,6 +57,32 @@ namespace CarPoolWebAPI.Controllers
             {
                 return false;
             }
+        }
+        // PUT: api/Location/5
+        [HttpPut("{id}")]
+        public string PutLocation(string id, Location location)
+        {
+            if (id != location.Id)
+            {
+                return "Location does not exists";
+            }
+            else
+            {
+                if (locationServices.UpdateLocation(location))
+                {
+                    return "updated";
+                }
+                else
+                {
+                    return "Update failed";
+                }
+            }
+        }
+        // GET: api/Location/place
+        [HttpGet("{place}")]
+        public List<Location> GetLocationsWithName(string place)
+        {
+            return locationServices.GetLocations(place);
         }
     }
 }

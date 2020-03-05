@@ -7,17 +7,18 @@ using AutoMapper.Mappers;
 using CarPoolApplication.Models;
 using CarPoolDataBase;
 using CarPoolApplication.Services.Intefaces;
+using Microsoft.EntityFrameworkCore;
 
 namespace CarPoolApplication.Services
 {
    public class UserServices: IUserServices
     {    
 
-        static MapperConfiguration dbtoModelConfig = new MapperConfiguration(cfg => cfg.CreateMap<UserTable, User>());
-        IMapper dbtoModel = dbtoModelConfig.CreateMapper();
-        static MapperConfiguration modelToDbConfig = new MapperConfiguration(cfg => cfg.CreateMap<User, UserTable>());
-        IMapper modelToDb = modelToDbConfig.CreateMapper();
-        CarpoolDBContext Context;
+        static readonly MapperConfiguration dbtoModelConfig = new MapperConfiguration(cfg => cfg.CreateMap<UserTable, User>());
+        readonly IMapper dbtoModel = dbtoModelConfig.CreateMapper();
+        static readonly MapperConfiguration modelToDbConfig = new MapperConfiguration(cfg => cfg.CreateMap<User, UserTable>());
+        readonly IMapper modelToDb = modelToDbConfig.CreateMapper();
+        private readonly CarpoolDBContext Context;
         public UserServices(CarpoolDBContext context)
         {
             Context = context;
@@ -41,6 +42,7 @@ namespace CarPoolApplication.Services
             {
                 UserTable userTable = modelToDb.Map<User, UserTable>(user);
                 Context.UserTable.Add(userTable);
+                Context.SaveChanges();
                 return true;
             }
             catch
@@ -68,6 +70,20 @@ namespace CarPoolApplication.Services
             {
                 UserTable userTable = Context.UserTable.FirstOrDefault(user => string.Equals(user.Id, userId));
                 Context.UserTable.Remove(userTable);
+                Context.SaveChanges();
+                return true;
+            }
+            catch
+            {
+                return false;
+            }
+        }
+        public bool UpdateUser(User user)
+        {
+            try
+            {
+                UserTable userTable = modelToDb.Map<User, UserTable>(user);
+                Context.Entry(userTable).State = EntityState.Modified;
                 Context.SaveChanges();
                 return true;
             }

@@ -7,16 +7,17 @@ using CarPoolDataBase;
 using AutoMapper;
 using System.Linq;
 using CarPoolApplication.Services.Intefaces;
+using Microsoft.EntityFrameworkCore;
 namespace CarPoolApplication.Services
 {
     public class LocationServices:ILocationServices
     {
-        static MapperConfiguration dbtoModelConfig = new MapperConfiguration(cfg => cfg.CreateMap<LocationTable, Location>());
-        IMapper dbtoModel = dbtoModelConfig.CreateMapper();
-        static MapperConfiguration modelToDbConfig = new MapperConfiguration(cfg => cfg.CreateMap<Location, LocationTable>());
-        IMapper modelToDb = modelToDbConfig.CreateMapper();
-       
-        CarpoolDBContext Context;
+        static readonly MapperConfiguration dbtoModelConfig = new MapperConfiguration(cfg => cfg.CreateMap<LocationTable, Location>());
+        readonly IMapper dbtoModel = dbtoModelConfig.CreateMapper();
+        static readonly MapperConfiguration modelToDbConfig = new MapperConfiguration(cfg => cfg.CreateMap<Location, LocationTable>());
+        readonly IMapper modelToDb = modelToDbConfig.CreateMapper();
+
+        private readonly CarpoolDBContext Context;
         public LocationServices(CarpoolDBContext context)
         {
             Context = context;
@@ -27,6 +28,20 @@ namespace CarPoolApplication.Services
             {
                 LocationTable locationTable = modelToDb.Map<Location, LocationTable>(place);
                 Context.LocationTable.Add(locationTable);
+                Context.SaveChanges();
+                return true;
+            }
+            catch
+            {
+                return false;
+            }
+        }
+        public bool UpdateLocation(Location place)
+        {
+            try
+            {
+                LocationTable locationTable = modelToDb.Map<Location, LocationTable>(place);
+                Context.Entry(locationTable).State = EntityState.Modified;
                 Context.SaveChanges();
                 return true;
             }

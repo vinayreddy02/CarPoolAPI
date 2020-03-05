@@ -7,17 +7,18 @@ using CarPoolApplication.Models;
 using CarPoolApplication.Services;
 using CarPoolApplication.Services.Intefaces;
 using System.Linq;
+using Microsoft.EntityFrameworkCore;
 
 namespace CarPoolApplication.Services
 {
     public class VehicleServices:IVehicleServices
     {
-        static MapperConfiguration dbtoModelConfig = new MapperConfiguration(cfg => cfg.CreateMap<VehicleTable, Vehicle>());
-        IMapper dbtoModel = dbtoModelConfig.CreateMapper();
-        static MapperConfiguration modelToDbConfig = new MapperConfiguration(cfg => cfg.CreateMap<Vehicle, VehicleTable>());
-        IMapper modelToDb = modelToDbConfig.CreateMapper();
+        static readonly MapperConfiguration dbtoModelConfig = new MapperConfiguration(cfg => cfg.CreateMap<VehicleTable, Vehicle>());
+        readonly IMapper dbtoModel = dbtoModelConfig.CreateMapper();
+        static readonly MapperConfiguration modelToDbConfig = new MapperConfiguration(cfg => cfg.CreateMap<Vehicle, VehicleTable>());
+        readonly IMapper modelToDb = modelToDbConfig.CreateMapper();
 
-        CarpoolDBContext Context;
+        private readonly CarpoolDBContext Context;
         public VehicleServices(CarpoolDBContext context)
         {
             Context = context;
@@ -42,9 +43,7 @@ namespace CarPoolApplication.Services
             try
             {
                 VehicleTable vehicleTable = modelToDb.Map<Vehicle, VehicleTable>(vehicle);
-
                 Context.VehicleTable.Add(vehicleTable);
-
                 Context.SaveChanges();
                 return true;
             }
@@ -53,6 +52,20 @@ namespace CarPoolApplication.Services
                 return false;
             }
 
+        }
+        public bool UpdateVehicle(Vehicle vehicle)
+        {
+            try
+            {
+                VehicleTable vehicleTable = modelToDb.Map<Vehicle, VehicleTable>(vehicle);
+                Context.Entry(vehicleTable).State = EntityState.Modified;
+                Context.SaveChanges();
+                return true;
+            }
+            catch
+            {
+                return false;
+            }
         }
         public Vehicle GetVehicle(string vehicleId)
         {

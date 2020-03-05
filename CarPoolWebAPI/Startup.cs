@@ -32,7 +32,7 @@ namespace CarPoolWebAPI
             services.AddControllers();
             services.AddTransient<IUserServices, UserServices>();
             services.AddTransient<IOfferServices,OfferServices>();
-            services.AddTransient<IBookingServices,BookingServices>();
+            services.AddTransient<IBooKingServices,BookingServices>();
             services.AddTransient<ILocationServices,LocationServices>();
             services.AddTransient<IVehicleServices, VehicleServices>();
             services.AddTransient<IStationServices, StationServices>();

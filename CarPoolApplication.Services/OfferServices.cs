@@ -6,24 +6,23 @@ using CarPoolApplication.Models;
 using CarPoolDataBase;
 using  System.Linq;
 using CarPoolApplication.Services.Intefaces;
+using Microsoft.EntityFrameworkCore;
 
 namespace CarPoolApplication.Services
 {
     public class OfferServices:IOfferServices
     {
-
-        static MapperConfiguration dbtoModelConfig = new MapperConfiguration(cfg => cfg.CreateMap<OfferTable, Offer>());
-        IMapper dbtoModel = dbtoModelConfig.CreateMapper();
-        static MapperConfiguration modelToDbConfig = new MapperConfiguration(cfg => cfg.CreateMap<Offer, OfferTable>());
-        IMapper modelToDb = modelToDbConfig.CreateMapper();
-
+        static readonly MapperConfiguration dbtoModelConfig = new MapperConfiguration(cfg => cfg.CreateMap<OfferTable, Offer>());
+        readonly IMapper dbtoModel = dbtoModelConfig.CreateMapper();
+        static readonly MapperConfiguration modelToDbConfig = new MapperConfiguration(cfg => cfg.CreateMap<Offer, OfferTable>());
+        readonly IMapper modelToDb = modelToDbConfig.CreateMapper();
         private readonly CarpoolDBContext Context;
-
-        public OfferServices(CarpoolDBContext context)
+        readonly IStationServices StationServices;
+        public OfferServices(CarpoolDBContext context,IStationServices stationServices)
         {
             Context = context;
+            StationServices = stationServices;
         }
-
         public List<Offer> GetAll()
         {
             try
@@ -41,8 +40,6 @@ namespace CarPoolApplication.Services
             try
             {
                 OfferTable offerTable = modelToDb.Map<Offer, OfferTable>(offer);
-
-
                 Context.OfferTable.Add(offerTable);
                 Context.SaveChanges();
                 return true;
@@ -51,7 +48,20 @@ namespace CarPoolApplication.Services
             {
                 return false;
             }
-
+        }
+        public bool UpdateOffer(Offer offer)
+        {
+            try
+            {
+                OfferTable offerTable = modelToDb.Map<Offer, OfferTable>(offer);
+                Context.Entry(offerTable).State = EntityState.Modified;
+                Context.SaveChanges();
+                return true;
+            }
+            catch
+            {
+                return false;
+            }
         }
         public List<Offer> GetOffers(string userID)
         {
@@ -65,39 +75,28 @@ namespace CarPoolApplication.Services
                 return null;
             }
         }
-        public Offer GetOfferUsingOfferID(string OfferID)
-        {
-            try
-            {
-                OfferTable offerTable= Context.OfferTable.FirstOrDefault(offer => string.Equals(offer.Id, OfferID));
-                return dbtoModel.Map<OfferTable, Offer>(offerTable);
-
-
-            }
-            catch
-            {
-                return null;
-            }
-        }
-        public List<Offer> GetAvilableOffers( List<Station> fromLocations, List<Station> toLocations, int numberOfSeats, DateTime dateTime)
+        
+        public List<Offer> GetAvilableOffers(string fromLocationId, string toLocationId, int numberOfSeats, DateTime dateTime)
         {
             try
             {
                 OfferTable offerTable;
                 int numberOfPoints;
+                List<Station> fromStations = StationServices.GetStations(fromLocationId);
+                List<Station> toStations= StationServices.GetStations(toLocationId);
                 List<Offer> AvailableOffers = new List<Offer>();
 
-                for (int fromIndex = 0; fromIndex < fromLocations.Count; fromIndex++)
+                for (int fromIndex = 0; fromIndex < fromStations.Count; fromIndex++)
                 {
-                    for (int toIndex = 0; toIndex < fromLocations.Count; toIndex++)
+                    for (int toIndex = 0; toIndex < toStations.Count; toIndex++)
                     {
-                        if (string.Equals(fromLocations[fromIndex].OfferId, toLocations[toIndex].OfferId) && fromLocations[fromIndex].StationNumber < toLocations[toIndex].StationNumber)
+                        if (string.Equals(fromStations[fromIndex].OfferId, toStations[toIndex].OfferId) && fromStations[fromIndex].StationNumber < toStations[toIndex].StationNumber)
                         {
-                            offerTable = Context.OfferTable.FirstOrDefault(offer => string.Equals(offer.Id, fromLocations[fromIndex].OfferId));
+                            offerTable = Context.OfferTable.FirstOrDefault(offer => string.Equals(offer.Id, fromStations[fromIndex].OfferId));
                             
                             if (offerTable.OfferStatus.Equals(OfferStatus.open) && (offerTable.NumberOfSeats > numberOfSeats) && (string.Equals(offerTable.DateTime.Date.ToString(), dateTime.Date.ToString())))
                             {
-                                numberOfPoints = toLocations[toIndex].StationNumber - fromLocations[fromIndex].StationNumber;
+                                numberOfPoints = toStations[toIndex].StationNumber - fromStations[fromIndex].StationNumber;
                                 offerTable.Price = numberOfPoints * offerTable.CostperPoint;
                                 Context.SaveChanges();
                                 Offer offer= dbtoModel.Map<OfferTable,Offer>(offerTable);
@@ -181,7 +180,6 @@ namespace CarPoolApplication.Services
                 offerTable.OfferStatus = OfferStatus.close.ToString();
                 Context.SaveChanges();
                 return true;
-
             }
             catch
             {
@@ -193,7 +191,7 @@ namespace CarPoolApplication.Services
             try
             {
                 OfferTable offerTable = Context.OfferTable.FirstOrDefault(offer => string.Equals(offer.Id, offerId));
-                return iMapper.Map<OfferTable, Offer>(offerTable);
+                return dbtoModel.Map<OfferTable, Offer>(offerTable);
             }
             catch
             {

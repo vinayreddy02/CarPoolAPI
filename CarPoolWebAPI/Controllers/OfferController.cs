@@ -14,18 +14,18 @@ namespace CarPoolWebAPI.Controllers
     [ApiController]
     public class OfferController : ControllerBase
     {
-        IOfferServices OfferServices;
+        readonly IOfferServices OfferServices;
         public OfferController(IOfferServices services)
         {
             OfferServices = services;
         }
-        // GET: api/Offers
+        // GET: api/Offer
         [HttpGet]
         public List<Offer> GetOffers()
         {
             return OfferServices.GetAll();
         }
-        // POST: api/Offers
+        // POST: api/Offer
         [HttpPost]
         public bool PostUser(Offer offer)
         {
@@ -37,15 +37,14 @@ namespace CarPoolWebAPI.Controllers
             {
                 return false;
             }
-
         }
-        // GET: api/Offers/5
+        // GET: api/Offer/5
         [HttpGet("{id}")]
         public Offer GetOffer(string id)
         {
-            return OfferServices.GetOfferUsingOfferID(id);
+            return OfferServices.GetOffer(id);
         }
-        // DELETE: api/Offers/5
+        // DELETE: api/Offer/5
         [HttpDelete("{id}")]
         public bool DeleteOffer(string id)
         {
@@ -57,6 +56,90 @@ namespace CarPoolWebAPI.Controllers
             {
                 return false;
             }
+        }
+        // PUT: api/Offer/5
+        [HttpPut("{id}")]
+        public string PutOffer(string id, Offer offer)
+        {
+            if (id != offer.Id)
+            {
+                return "Station does not exists";
+            }
+            else
+            {
+                if (OfferServices.UpdateOffer(offer))
+                {
+                    return "updated";
+                }
+                else
+                {
+                    return "Update failed";
+                }
+            }
+        }
+        [HttpGet]
+        // GET: api/Offer/AllAvailableOffers
+        public List<Offer> AllAvailableOffers(string fromLocationId, string toLocationId, int numberOfSeats, DateTime dateTime)
+        {
+            return OfferServices.GetAvilableOffers(fromLocationId, toLocationId, numberOfSeats, dateTime);
+        }
+        [HttpGet]
+        // GET: api/Offer/CancelRide
+        public bool CancelRide(string offerId)
+        {
+            if (OfferServices.CancelRide(offerId))
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+        [HttpGet]
+        // GET: api/Offer/EndRide
+        public bool EndRide(string offerId)
+        {
+            if (OfferServices.EndRide(offerId))
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+        [HttpGet]
+        // GET: api/Offer/StartRide
+        public bool CloseOffer(string offerId)
+        {
+            if (OfferServices.CloseOffer(offerId))
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+        [HttpGet]
+        // GET: api/Offer/StartRide
+        public bool StartRide(string offerId)
+        {
+            if (OfferServices.StartRide(offerId))
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+        [HttpGet]
+        // GET: api/Offer/GetOffersUsingUserId
+        public List<Offer> GetOffersUsingUserId(string userId)
+        {
+            return OfferServices.GetOffers(userId);
         }
     }
 }

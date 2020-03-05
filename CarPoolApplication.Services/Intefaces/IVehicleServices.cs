@@ -11,5 +11,6 @@ namespace CarPoolApplication.Services.Intefaces
         public Vehicle GetVehicle(string vehicleId);
         public bool AddVehicle(Vehicle vehicle);
         public bool DeleteVehicle(string vehicleId);
+        public bool UpdateVehicle(Vehicle vehicle);
     }
 }

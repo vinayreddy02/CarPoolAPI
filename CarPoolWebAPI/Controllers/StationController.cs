@@ -14,14 +14,14 @@ namespace CarPoolWebAPI.Controllers
     [ApiController]
     public class StationController : ControllerBase
     {
-        IStationServices stationServices;
+        readonly IStationServices stationServices;
         public StationController(IStationServices services)
         {
             stationServices = services;
         }
         // GET: api/Stations
         [HttpGet]
-        public List<Station> GetStations()
+        public List<Station> GetAll()
         {
             return stationServices.GetAll();
         }
@@ -57,6 +57,36 @@ namespace CarPoolWebAPI.Controllers
             {
                 return false;
             }
+        }
+        // PUT: api/Station/5
+        [HttpPut("{id}")]
+        public string PutStation(string id, Station station)
+        {
+            if (id != station.Id)
+            {
+                return "Station does not exists";
+            }
+            else
+            {
+                if (stationServices.UpdateStation(station))
+                {
+                    return "updated";
+                }
+                else
+                {
+                    return "Update failed";
+                }
+            }
+        }
+        [HttpGet("{locationid}")]
+        public List<Station> GetStationsUsingLocationId(string locationId)
+        {
+            return stationServices.GetStations(locationId);
+        }
+        [HttpGet("{offerid}")]
+        public List<Station> GetStationsusingOfferId(string offerid)
+        {
+            return stationServices.GetStationsUsingOfferID(offerid);
         }
     }
 }

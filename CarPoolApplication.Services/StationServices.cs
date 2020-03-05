@@ -6,17 +6,18 @@ using CarPoolDataBase;
 using CarPoolApplication.Services.Intefaces;
 using AutoMapper;
 using System.Linq;
+using Microsoft.EntityFrameworkCore;
 
 namespace CarPoolApplication.Services
 {
     public class StationServices:IStationServices
     {
-        static MapperConfiguration dbtoModelConfig = new MapperConfiguration(cfg => cfg.CreateMap<LocationTable, Location>());
-        IMapper dbtoModel = dbtoModelConfig.CreateMapper();
-        static MapperConfiguration modelToDbConfig = new MapperConfiguration(cfg => cfg.CreateMap<Location, LocationTable>());
-        IMapper modelToDb = modelToDbConfig.CreateMapper();
+        static readonly MapperConfiguration dbtoModelConfig = new MapperConfiguration(cfg => cfg.CreateMap<LocationTable, Location>());
+        readonly IMapper dbtoModel = dbtoModelConfig.CreateMapper();
+        static readonly MapperConfiguration modelToDbConfig = new MapperConfiguration(cfg => cfg.CreateMap<Location, LocationTable>());
+        readonly IMapper modelToDb = modelToDbConfig.CreateMapper();
 
-        CarpoolDBContext Context;
+        private readonly CarpoolDBContext Context;
         public StationServices(CarpoolDBContext context)
         {
             Context = context;
@@ -27,6 +28,20 @@ namespace CarPoolApplication.Services
             {
                 StationTable stationTable = modelToDb.Map<Station, StationTable>(place);
                 Context.StationTable.Add(stationTable);
+                Context.SaveChanges();
+                return true;
+            }
+            catch
+            {
+                return false;
+            }
+        }
+        public bool UpdateStation(Station place)
+        {
+            try
+            {
+                StationTable stationTable = modelToDb.Map<Station, StationTable>(place);
+                Context.Entry(stationTable).State = EntityState.Modified;
                 Context.SaveChanges();
                 return true;
             }
@@ -98,5 +113,6 @@ namespace CarPoolApplication.Services
                 return false;
             }
         }
+
     }
 }

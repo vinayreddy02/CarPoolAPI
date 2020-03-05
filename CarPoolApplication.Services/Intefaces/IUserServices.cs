@@ -12,5 +12,6 @@ namespace CarPoolApplication.Services.Intefaces
         public User GetUser(string userId);
         public bool DeleteUser(string userId);
         public bool IsValidUser(string ID, string password);
+        public bool UpdateUser(User user);
     }
 }

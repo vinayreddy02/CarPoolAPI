@@ -7,22 +7,26 @@ using CarPoolDataBase;
 using CarPoolApplication.Services.Intefaces;
 using AutoMapper;
 using AutoMapper.Configuration;
+using Microsoft.EntityFrameworkCore;
 
 
 namespace CarPoolApplication.Services
 {
-   public class BookingServices:IBookingServices
+   public class BookingServices:IBooKingServices
     {
-        static MapperConfiguration dbtoModelConfig = new MapperConfiguration(cfg => cfg.CreateMap<BookingTable, Booking>());
-        IMapper dbtoModel = dbtoModelConfig.CreateMapper();
-        static MapperConfiguration modelToDbConfig = new MapperConfiguration(cfg => cfg.CreateMap<Booking, BookingTable>());
-        IMapper modelToDb = modelToDbConfig.CreateMapper();
-       
-        CarpoolDBContext Context;
-        public BookingServices(CarpoolDBContext context)
+        static readonly MapperConfiguration dbtoModelConfig = new MapperConfiguration(cfg => cfg.CreateMap<BookingTable, Booking>());
+        readonly IMapper dbtoModel = dbtoModelConfig.CreateMapper();
+        static readonly MapperConfiguration modelToDbConfig = new MapperConfiguration(cfg => cfg.CreateMap<Booking, BookingTable>());
+        readonly IMapper modelToDb = modelToDbConfig.CreateMapper();
+
+        readonly CarpoolDBContext Context;
+       readonly IStationServices StationServices;
+        public BookingServices(CarpoolDBContext context, IStationServices stationServices)
         {
             Context = context;
+            StationServices = stationServices;
         }
+     
         public List<Booking> GetAll()
         {
             List<BookingTable> bookingTable = Context.BookingTable.ToList();
@@ -35,6 +39,21 @@ namespace CarPoolApplication.Services
             {
                 BookingTable bookingTable = modelToDb.Map<Booking, BookingTable>(bookingRequest);
                 Context.BookingTable.Add(bookingTable);
+                Context.SaveChanges();
+                return true;
+            }
+            catch
+            {
+                return false;
+            }
+        }
+        public bool UpdateBooking(Booking bookingRequest)
+        {
+            try
+            {
+                BookingTable bookingTable = modelToDb.Map<Booking, BookingTable>(bookingRequest);
+                Context.Entry(bookingTable).State = EntityState.Modified;
+                Context.SaveChanges();
                 return true;
             }
             catch
@@ -95,29 +114,30 @@ namespace CarPoolApplication.Services
                 return null;
             }
         }
-        public bool ApprovalOfBooking(string requestID,string offerID, List<Station> locations)
+        public bool ApproveRequests(string requestID,string offerID)
         {
             try
             {
                 int numberOfPoints;
+                List<Station> stations = StationServices.GetStationsUsingOfferID(offerID);
                 BookingTable request=Context.BookingTable.FirstOrDefault(request => string.Equals(request.Id, requestID));
                 OfferTable offer = Context.OfferTable.FirstOrDefault(offer => string.Equals(offer.Id, offerID));
                 int fromIndex = -1, toIndex = -1;
-                for (int index = 0; index < locations.Count; index++)
+                for (int index = 0; index < stations.Count; index++)
                 {
-                    if (string.Equals(request.FromPointId, locations[index].LocationId))
+                    if (string.Equals(request.FromPointId, stations[index].LocationId))
                     {
                         fromIndex = index;
                     }
-                    else if (string.Equals(request.ToPointId, locations[index].LocationId))
+                    else if (string.Equals(request.ToPointId, stations[index].LocationId))
                     {
                         toIndex = index;
                     }
                     if (fromIndex != -1 && toIndex != -1)
                     {
-                        if (locations[fromIndex].StationNumber < locations[toIndex].StationNumber)
+                        if (stations[fromIndex].StationNumber < stations[toIndex].StationNumber)
                         {
-                            numberOfPoints = locations[toIndex].StationNumber - locations[fromIndex].StationNumber;
+                            numberOfPoints = stations[toIndex].StationNumber - stations[fromIndex].StationNumber;
                             
                             request.Price = numberOfPoints * offer.CostperPoint* request.NumberOfSeats;
                             request.BookingStatus = BookingStatus.confirm.ToString();

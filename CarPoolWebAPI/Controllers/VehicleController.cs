@@ -14,18 +14,18 @@ namespace CarPoolWebAPI.Controllers
     [ApiController]
     public class VehicleController : ControllerBase
     {
-        VehicleServices vehicleServices;
+        readonly VehicleServices vehicleServices;
         public VehicleController(VehicleServices services)
         {
             vehicleServices = services;
         }
-        // GET: api/Vehicles
+        // GET: api/Vehicle
         [HttpGet]
         public List<Vehicle> GetVehicles()
         {
             return vehicleServices.GetVehicles();
         }
-        // POST: api/Vehicles
+        // POST: api/Vehicle
         [HttpPost]
         public bool PostVehicle(Vehicle vehicle)
         {
@@ -39,13 +39,13 @@ namespace CarPoolWebAPI.Controllers
             }
 
         }
-        // GET: api/Vehicles/5
+        // GET: api/Vehicle/5
         [HttpGet("{id}")]
         public Vehicle GetVehicle(string id)
         {
             return vehicleServices.GetVehicle(id);
         }
-        // DELETE: api/Vehicles/5
+        // DELETE: api/Vehicle/5
         [HttpDelete("{id}")]
         public bool DeleteVehicle(string id)
         {
@@ -56,6 +56,26 @@ namespace CarPoolWebAPI.Controllers
             else
             {
                 return false;
+            }
+        }
+        // PUT: api/Vehicle/5
+        [HttpPut("{id}")]
+        public string PutVehicle(string id, Vehicle vehicle)
+        {
+            if (id != vehicle.Id)
+            {
+                return "Vehicle does not exists";
+            }
+            else
+            {
+                if (vehicleServices.UpdateVehicle(vehicle))
+                {
+                    return "updated";
+                }
+                else
+                {
+                    return "Update failed";
+                }
             }
         }
 

@@ -5,12 +5,12 @@ using CarPoolApplication.Models;
 
 namespace CarPoolApplication.Services.Intefaces
 {
-   public interface IBookingServices
+   public interface IBooKingServices
     {
         public List<Booking> GetRequests(string offerID);
         public List<Booking> GetAllbookings(string userID);
         public List<Booking> GetAllRidesToStart(string offerID);
-        public bool ApprovalOfBooking(string requestID, string offerID, List<Station> locations);
+        public bool ApproveRequests(string requestID, string offerID);
         public bool StartRides(string offerID);
         public bool EndRides(string offerID);
         public bool CancelRides(string offerID);
@@ -18,5 +18,6 @@ namespace CarPoolApplication.Services.Intefaces
         public Booking GetBooking(string BookingID);
         public List<Booking> GetAll();
         public bool AddRequest(Booking bookingRequest);
+        public bool UpdateBooking(Booking bookingRequest);
     }
 }
