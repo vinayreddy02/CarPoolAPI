@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 using AutoMapper;
-using CarPoolDataBase;
+using CarPoolApplication.DataBase;
 using CarPoolApplication.Models;
 using CarPoolApplication.Services;
 using CarPoolApplication.Services.Intefaces;
@@ -13,10 +13,7 @@ namespace CarPoolApplication.Services
 {
     public class VehicleServices:IVehicleServices
     {
-        static readonly MapperConfiguration dbtoModelConfig = new MapperConfiguration(cfg => cfg.CreateMap<VehicleTable, Vehicle>());
-        readonly IMapper dbtoModel = dbtoModelConfig.CreateMapper();
-        static readonly MapperConfiguration modelToDbConfig = new MapperConfiguration(cfg => cfg.CreateMap<Vehicle, VehicleTable>());
-        readonly IMapper modelToDb = modelToDbConfig.CreateMapper();
+      
 
         private readonly CarpoolDBContext Context;
         public VehicleServices(CarpoolDBContext context)
@@ -29,9 +26,8 @@ namespace CarPoolApplication.Services
             try
             {
                 List<VehicleTable> vehicleTables = Context.VehicleTable.ToList();
-                return dbtoModel.Map<List<VehicleTable>, List<Vehicle>>(vehicleTables);
-               
-
+                return AutoMapping.dbtoModelVehicle.Map<List<VehicleTable>, List<Vehicle>>(vehicleTables);
+           
             }
             catch
             {
@@ -42,7 +38,7 @@ namespace CarPoolApplication.Services
         {
             try
             {
-                VehicleTable vehicleTable = modelToDb.Map<Vehicle, VehicleTable>(vehicle);
+                VehicleTable vehicleTable = AutoMapping.modelToDbVehicle.Map<Vehicle, VehicleTable>(vehicle);
                 Context.VehicleTable.Add(vehicleTable);
                 Context.SaveChanges();
                 return true;
@@ -57,7 +53,7 @@ namespace CarPoolApplication.Services
         {
             try
             {
-                VehicleTable vehicleTable = modelToDb.Map<Vehicle, VehicleTable>(vehicle);
+                VehicleTable vehicleTable = AutoMapping.modelToDbVehicle.Map<Vehicle, VehicleTable>(vehicle);
                 Context.Entry(vehicleTable).State = EntityState.Modified;
                 Context.SaveChanges();
                 return true;
@@ -72,7 +68,7 @@ namespace CarPoolApplication.Services
             try
             {
                 VehicleTable vehicleTable = Context.VehicleTable.FirstOrDefault(vehicle => string.Equals(vehicle.Id, vehicleId));
-                return dbtoModel.Map<VehicleTable, Vehicle>(vehicleTable);
+                return AutoMapping.dbtoModelVehicle.Map<VehicleTable, Vehicle>(vehicleTable);
    
             }
             catch

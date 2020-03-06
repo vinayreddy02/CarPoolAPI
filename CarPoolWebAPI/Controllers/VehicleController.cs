@@ -8,13 +8,13 @@ using CarPoolApplication.Models;
 using CarPoolApplication.Services;
 using CarPoolApplication.Services.Intefaces;
 
-namespace CarPoolWebAPI.Controllers
-{
+namespace CarPoolApplication.API.Controllers
+{ 
     [Route("api/[controller]")]
     [ApiController]
     public class VehicleController : ControllerBase
     {
-         IVehicleServices vehicleServices;
+        readonly IVehicleServices vehicleServices;
         public VehicleController(IVehicleServices services)
         {
             vehicleServices = services;
@@ -27,7 +27,7 @@ namespace CarPoolWebAPI.Controllers
         }
         // POST: api/Vehicle
         [HttpPost]
-        public bool PostVehicle(Vehicle vehicle)
+        public bool AddVehicle(Vehicle vehicle)
         {
             if (vehicleServices.AddVehicle(vehicle))
             {

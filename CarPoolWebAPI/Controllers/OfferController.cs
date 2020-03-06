@@ -8,7 +8,7 @@ using CarPoolApplication.Models;
 using CarPoolApplication.Services;
 using CarPoolApplication.Services.Intefaces;
 
-namespace CarPoolWebAPI.Controllers
+namespace CarPoolApplication.API.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
@@ -19,16 +19,12 @@ namespace CarPoolWebAPI.Controllers
         {
             OfferServices = services;
         }
-        // GET: api/Offer
         [HttpGet]
-        [Route("api/[controller]/GetOffers")]
         public List<Offer> GetOffers()
         {
             return OfferServices.GetAll();
         }
-        // POST: api/Offer
         [HttpPost]
-        [Route("api/[controller]")]
         public bool PostUser(Offer offer)
         {
             if (OfferServices.AddOffer(offer))
@@ -40,16 +36,12 @@ namespace CarPoolWebAPI.Controllers
                 return false;
             }
         }
-        // GET: api/Offer/5
-        [HttpGet]
-        [Route("api/[controller]/{id}")]
+        [HttpGet("{id}")]
         public Offer GetOffer(string id)
         {
             return OfferServices.GetOffer(id);
         }
-        // DELETE: api/Offer/5
-        [HttpDelete]
-        [Route("api/[controller]/{id}")]
+        [HttpDelete("{id}")]
         public bool DeleteOffer(string id)
         {
             if (OfferServices.DeleteOffer(id))
@@ -61,9 +53,7 @@ namespace CarPoolWebAPI.Controllers
                 return false;
             }
         }
-        // PUT: api/Offer/5
-        [HttpPut]
-        [Route("api/[controller]/{id}")]
+        [HttpPut("{id}")]
         public string PutOffer(string id, Offer offer)
         {
             if (id != offer.Id)
@@ -83,16 +73,14 @@ namespace CarPoolWebAPI.Controllers
             }
         }
         [HttpGet]
-        [Route("api/[controller]/AllAvailableOffers/{fromLocationId}/{toLocationId}/{numberOfSeats:int}/{dateTime:DateTime}")]
-        // GET: api/Offer/AllAvailableOffers
+        [Route("AllAvailableOffers/{fromLocationId}/{toLocationId}/{numberOfSeats:int}/{dateTime:DateTime}")]
         public List<Offer> AllAvailableOffers(string fromLocationId, string toLocationId, int numberOfSeats, DateTime dateTime)
         {
             return OfferServices.GetAvilableOffers(fromLocationId, toLocationId, numberOfSeats, dateTime);
         }
         [HttpGet]
-        [Route("api/[controller]/CancelRide/{offerId}")]
-        // GET: api/Offer/CancelRide
-        public bool CancelRide(string offerId)
+        [Route("CancelRide/{offerId}")]
+        public bool CancelRideUsingOfferId(string offerId)
         {
             if (OfferServices.CancelRide(offerId))
             {
@@ -104,8 +92,7 @@ namespace CarPoolWebAPI.Controllers
             }
         }
         [HttpGet]
-        [Route("api/[controller]/EndRide/{offerId}")]
-        // GET: api/Offer/EndRide
+        [Route("EndRide/{offerId}")]
         public bool EndRide(string offerId)
         {
             if (OfferServices.EndRide(offerId))
@@ -118,8 +105,7 @@ namespace CarPoolWebAPI.Controllers
             }
         }
         [HttpGet]
-        [Route("api/[controller]/CloseOffer/{offerId}")]
-        // GET: api/Offer/CloseOffer
+        [Route("CloseOffer/{offerId}")]
         public bool CloseOffer(string offerId)
         {
             if (OfferServices.CloseOffer(offerId))
@@ -132,8 +118,7 @@ namespace CarPoolWebAPI.Controllers
             }
         }
         [HttpGet]
-        [Route("api/[controller]/StartRide/{offerId}")]
-        // GET: api/Offer/StartRide
+        [Route("StartRide/{offerId}")]
         public bool StartRide(string offerId)
         {
             if (OfferServices.StartRide(offerId))
@@ -146,8 +131,7 @@ namespace CarPoolWebAPI.Controllers
             }
         }
         [HttpGet]
-        [Route("api/[controller]/GetOffersUsingUserId/{userId}")]
-        // GET: api/Offer/GetOffersUsingUserId
+        [Route("GetOffersUsingUserId/{userId}")]
         public List<Offer> GetOffersUsingUserId(string userId)
         {
             return OfferServices.GetOffers(userId);

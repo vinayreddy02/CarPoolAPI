@@ -2,8 +2,8 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata;
 
-namespace CarPoolDataBase
-{
+namespace CarPoolApplication.DataBase
+{ 
     public partial class CarpoolDBContext : DbContext
     {
         public CarpoolDBContext()

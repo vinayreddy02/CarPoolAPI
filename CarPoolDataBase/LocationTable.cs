@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace CarPoolDataBase
+namespace CarPoolApplication.DataBase
 {
     public partial class LocationTable
     {
@@ -12,10 +12,8 @@ namespace CarPoolDataBase
             OfferTableFromPoint = new HashSet<OfferTable>();
             OfferTableToPoint = new HashSet<OfferTable>();
         }
-
         public string Id { get; set; }
         public string Place { get; set; }
-
         public virtual ICollection<BookingTable> BookingTableFromPoint { get; set; }
         public virtual ICollection<BookingTable> BookingTableToPoint { get; set; }
         public virtual ICollection<OfferTable> OfferTableFromPoint { get; set; }

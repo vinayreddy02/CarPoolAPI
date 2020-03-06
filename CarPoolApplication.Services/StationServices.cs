@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 using CarPoolApplication.Models;
-using CarPoolDataBase;
+using CarPoolApplication.DataBase;
 using CarPoolApplication.Services.Intefaces;
 using AutoMapper;
 using System.Linq;
@@ -12,10 +12,7 @@ namespace CarPoolApplication.Services
 {
     public class StationServices:IStationServices
     {
-        static readonly MapperConfiguration dbtoModelConfig = new MapperConfiguration(cfg => cfg.CreateMap<LocationTable, Location>());
-        readonly IMapper dbtoModel = dbtoModelConfig.CreateMapper();
-        static readonly MapperConfiguration modelToDbConfig = new MapperConfiguration(cfg => cfg.CreateMap<Location, LocationTable>());
-        readonly IMapper modelToDb = modelToDbConfig.CreateMapper();
+      
 
         private readonly CarpoolDBContext Context;
         public StationServices(CarpoolDBContext context)
@@ -26,7 +23,7 @@ namespace CarPoolApplication.Services
         {
             try
             {
-                StationTable stationTable = modelToDb.Map<Station, StationTable>(place);
+                StationTable stationTable =AutoMapping.modelToDbStation.Map<Station, StationTable>(place);
                 Context.StationTable.Add(stationTable);
                 Context.SaveChanges();
                 return true;
@@ -40,7 +37,7 @@ namespace CarPoolApplication.Services
         {
             try
             {
-                StationTable stationTable = modelToDb.Map<Station, StationTable>(place);
+                StationTable stationTable = AutoMapping.modelToDbStation.Map<Station, StationTable>(place);
                 Context.Entry(stationTable).State = EntityState.Modified;
                 Context.SaveChanges();
                 return true;
@@ -55,7 +52,7 @@ namespace CarPoolApplication.Services
             try
             {
                 List<StationTable> stationTables = Context.StationTable.ToList();
-                return dbtoModel.Map<List<StationTable>, List<Station>>(stationTables);
+                return AutoMapping.dbtoModelStation.Map<List<StationTable>, List<Station>>(stationTables);
             }
             catch
             {
@@ -67,7 +64,7 @@ namespace CarPoolApplication.Services
             try
             {
                 List<StationTable> stationTables = Context.StationTable.Where(station => string.Equals(station.Id, placeID)).ToList();
-                return dbtoModel.Map<List<StationTable>, List<Station>>(stationTables);
+                return AutoMapping.dbtoModelStation.Map<List<StationTable>, List<Station>>(stationTables);
             }
             catch
             {
@@ -79,7 +76,7 @@ namespace CarPoolApplication.Services
             try
             {
                 List<StationTable> stationTables = Context.StationTable.Where(station => string.Equals(station.OfferId, offerID)).ToList();
-                return dbtoModel.Map<List<StationTable>, List<Station>>(stationTables);
+                return AutoMapping.dbtoModelStation.Map<List<StationTable>, List<Station>>(stationTables);
             }
             catch
             {
@@ -91,7 +88,7 @@ namespace CarPoolApplication.Services
             try
             {
                 StationTable stationTable = Context.StationTable.FirstOrDefault(station => string.Equals(station.Id, stationId));
-                return dbtoModel.Map<StationTable, Station>(stationTable);
+                return AutoMapping.dbtoModelStation.Map<StationTable, Station>(stationTable);
             }
             catch
             {

@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 using AutoMapper;
 using AutoMapper.Mappers;
 using CarPoolApplication.Models;
-using CarPoolDataBase;
+using CarPoolApplication.DataBase;
 using CarPoolApplication.Services.Intefaces;
 using Microsoft.EntityFrameworkCore;
 
@@ -14,10 +14,7 @@ namespace CarPoolApplication.Services
    public class UserServices: IUserServices
     {    
 
-        static readonly MapperConfiguration dbtoModelConfig = new MapperConfiguration(cfg => cfg.CreateMap<UserTable, User>());
-        readonly IMapper dbtoModel = dbtoModelConfig.CreateMapper();
-        static readonly MapperConfiguration modelToDbConfig = new MapperConfiguration(cfg => cfg.CreateMap<User, UserTable>());
-        readonly IMapper modelToDb = modelToDbConfig.CreateMapper();
+        
         private readonly CarpoolDBContext Context;
         public UserServices(CarpoolDBContext context)
         {
@@ -28,7 +25,7 @@ namespace CarPoolApplication.Services
             try
             {
                 List<UserTable> userTables = Context.UserTable.ToList();
-                List<User> users = dbtoModel.Map<List<UserTable>, List<User>>(userTables);
+                List<User> users =AutoMapping.dbtoModelUser.Map<List<UserTable>, List<User>>(userTables);
                 return users;
             }
             catch
@@ -40,7 +37,7 @@ namespace CarPoolApplication.Services
         {
             try
             {
-                UserTable userTable = modelToDb.Map<User, UserTable>(user);
+                UserTable userTable = AutoMapping.modelToDbUser.Map<User, UserTable>(user);
                 Context.UserTable.Add(userTable);
                 Context.SaveChanges();
                 return true;
@@ -56,11 +53,12 @@ namespace CarPoolApplication.Services
             try
             {
                 UserTable userTable = Context.UserTable.FirstOrDefault(user => string.Equals(user.Id, userId));
-                User user = dbtoModel.Map<UserTable, User>(userTable);
+                User user = AutoMapping.dbtoModelUser.Map<UserTable, User>(userTable);
                 return user;
             }
             catch
             {
+                
                 return null;
             }
         }
@@ -68,8 +66,8 @@ namespace CarPoolApplication.Services
         {
             try
             {
-                UserTable userTable = Context.UserTable.FirstOrDefault(user => string.Equals(user.Id, userId));
-                Context.UserTable.Remove(userTable);
+                Context.Remove(Context.UserTable.FirstOrDefault(user => string.Equals(user.Id, userId)));
+                // Context.UserTable.Remove(userTable);
                 Context.SaveChanges();
                 return true;
             }
@@ -82,7 +80,7 @@ namespace CarPoolApplication.Services
         {
             try
             {
-                UserTable userTable = modelToDb.Map<User, UserTable>(user);
+                UserTable userTable = AutoMapping.modelToDbUser.Map<User, UserTable>(user);
                 Context.Entry(userTable).State = EntityState.Modified;
                 Context.SaveChanges();
                 return true;

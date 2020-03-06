@@ -8,9 +8,9 @@ using CarPoolApplication.Services;
 using CarPoolApplication.Models;
 using CarPoolApplication.Services.Intefaces;
 
-namespace CarPoolWebAPI.Controllers
+namespace CarPoolApplication.API.Controllers
 {
-   
+    [Route("api/[controller]")]
     [ApiController]
     public class LocationController : ControllerBase
     {
@@ -19,16 +19,12 @@ namespace CarPoolWebAPI.Controllers
         {
             locationServices = services;
         }
-        // GET: api/Location
         [HttpGet]
-        [Route("api/[controller]/GetLocations")]
         public List<Location> GetLocations()
         {
             return locationServices.GetAll();
         }
-        // POST: api/Location
         [HttpPost]
-        [Route("api/[controller]")]
         public bool PostLocation(Location location)
         {
             if (locationServices.AddLocation(location))
@@ -41,16 +37,12 @@ namespace CarPoolWebAPI.Controllers
             }
 
         }
-        // GET: api/Location/5
-        [HttpGet]
-        [Route("api/[controller]/{id}")]
+        [HttpGet("{id}")]
         public Location GetLocation(string id)
         {
             return locationServices.GetLocation(id);
         }
-        // DELETE: api/Location/5
-        [HttpDelete]
-        [Route("api/[controller]/{id}")]
+        [HttpDelete("{id}")]
         public bool DeleteLocation(string id)
         {
             if (locationServices.DeleteLocation(id))
@@ -62,9 +54,7 @@ namespace CarPoolWebAPI.Controllers
                 return false;
             }
         }
-        // PUT: api/Location/5
-        [HttpPut]
-        [Route("api/[controller]/{id}")]
+        [HttpPut("{id}")]
         public string PutLocation(string id, Location location)
         {
             if (id != location.Id)
@@ -85,8 +75,8 @@ namespace CarPoolWebAPI.Controllers
         }
         // GET: api/Location/place
         [HttpGet]
-        [Route("api/[controller]/{place}")]
-        public List<Location> GetLocationsWithName(string place)
+        [Route("GetLocationsWithPlace/{place}")]
+        public List<Location> GetLocationsWithPlace(string place)
         {
             return locationServices.GetLocations(place);
         }

@@ -7,9 +7,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CarPoolApplication.Models",
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CarPoolApplication.Services", "CarPoolApplication.Services\CarPoolApplication.Services.csproj", "{1BFD999C-62EA-43DF-BBD2-9A5277A9A935}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CarPoolDataBase", "CarPoolDataBase\CarPoolDataBase.csproj", "{4D6FC749-6313-43F4-9D60-979D536103BE}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CarPoolApplication.DataBase", "CarPoolDataBase\CarPoolApplication.DataBase.csproj", "{4D6FC749-6313-43F4-9D60-979D536103BE}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CarPoolWebAPI", "CarPoolWebAPI\CarPoolWebAPI.csproj", "{8F503354-DFBA-43DA-8A3C-D364C5F1E68C}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CarPoolApplication.API", "CarPoolWebAPI\CarPoolApplication.API.csproj", "{8F503354-DFBA-43DA-8A3C-D364C5F1E68C}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

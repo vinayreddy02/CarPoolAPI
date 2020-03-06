@@ -8,9 +8,9 @@ using CarPoolApplication.Services;
 using CarPoolApplication.Models;
 using CarPoolApplication.Services.Intefaces;
 
-namespace CarPoolWebAPI.Controllers
+namespace CarPoolApplication.API.Controllers
 {
-   
+    [Route("api/[controller]")]
     [ApiController]
     public class BookingController : ControllerBase
     {
@@ -18,19 +18,19 @@ namespace CarPoolWebAPI.Controllers
         public BookingController(IBooKingServices services)
         {
             BookingServices = services;
-        }
-        // GET: api/Booking/GetBookings
-        
-        [HttpGet]
-        [Route("api/[controller]/GetBookings")]
+        }       
+        [HttpGet]        
         public List<Booking> GetBookings()
         {
             return BookingServices.GetAll();
         }
-        // POST: api/Booking/PostBooking
+        [HttpGet("{id}")]
+        public Booking GetBooking(string id)
+        {
+            return BookingServices.GetBooking(id);
+        }
         [HttpPost]
-        [Route("api/[controller]")]
-        public bool PostBooking(Booking booking)
+        public bool AddBooking(Booking booking)
         {
             if (BookingServices.AddRequest(booking))
             {
@@ -42,16 +42,7 @@ namespace CarPoolWebAPI.Controllers
             }
 
         }
-        // GET: api/Booking/GetBooking/id
-        [HttpGet]
-        [Route("api/[controller]/{id}")]
-        public Booking GetBooking(string id)
-        {
-            return BookingServices.GetBooking(id);
-        }
-        // DELETE: api/Booking/DeleteBooking/id
-        [HttpDelete]
-        [Route("api/[controller]/{id}")]
+        [HttpDelete("{id}")]       
         public bool DeleteBooking(string id)
         {
             if (BookingServices.DeleteBooking(id))
@@ -62,11 +53,9 @@ namespace CarPoolWebAPI.Controllers
             {
                 return false;
             }
-        }
-        // PUT: api/Booking/PutBooking/id
-        [HttpPut]
-        [Route("api/[controller]/{id}")]
-        public string PutBooking(string id, Booking booking)
+        }     
+        [HttpPut("{id}")]
+        public string UpdateBooking(string id, Booking booking)
         {
             if (id != booking.Id)
             {
@@ -83,32 +72,28 @@ namespace CarPoolWebAPI.Controllers
                     return "Update failed";
                 }
             }
-        }
-        // GET: api/Bookings/GetBookingsWithUserId
+        }     
         [HttpGet]
-        [Route("api/[controller]/GetBookingsWithUserId/{userId}")]
+        [Route("GetBookingsWithUserId/{userId}")]
         public List<Booking> GetBookingsWithUserId(string userId)
         {
             return BookingServices.GetAllbookings(userId);
         }
-        // GET: api/Bookings/GetAllRidesToStart
         [HttpGet]
-        [Route("api/[controller]/GetAllRidesToStart/{offerId}")]
-        public List<Booking> GetAllRidesToStart(string offerId)
+        [Route("GetAllRidesToStartUsingOfferId/{offerId}")]
+        public List<Booking> GetAllRidesToStartUsingOfferId(string offerId)
         {
             return BookingServices.GetAllRidesToStart(offerId);
         }
-        // GET: api/Bookings/GetRequests
         [HttpGet]
-        [Route("api/[controller]/GetRequests/{offerId}")]
-        public List<Booking> GetRequests(string offerId)
+        [Route("GetRequestsUsingOfferId/{offerId}")]
+        public List<Booking> GetRequestsUsingOfferId(string offerId)
         {
             return BookingServices.GetRequests(offerId);
         }
-        // GET: api/Bookings/StartRides
         [HttpGet]
-        [Route("api/[controller]/StartRides/{offerId}")]
-        public bool StartRides(string offerId)
+        [Route("StartRidesUsingOfferId/{offerId}")]
+        public bool StartRidesUsingOfferId(string offerId)
         {
             if (BookingServices.StartRides(offerId))
             {
@@ -119,10 +104,9 @@ namespace CarPoolWebAPI.Controllers
                 return false;
             }
         }
-        // GET: api/Bookings/EndRides
         [HttpGet]
-        [Route("api/[controller]/EndRides/{offerId}")]
-        public bool EndRides(string offerId)
+        [Route("EndRidesUsingOfferId/{offerId}")]
+        public bool EndRidesUsingOfferId(string offerId)
         {
             if (BookingServices.EndRides(offerId))
             {
@@ -133,10 +117,9 @@ namespace CarPoolWebAPI.Controllers
                 return false;
             }
         }
-        // GET: api/Bookings/CancelRides
         [HttpGet]
-        [Route("api/[controller]/CancelRides/{offerId}")]
-        public bool CancelRides(string offerId)
+        [Route("CancelRidesUsingOfferId/{offerId}")]
+        public bool CancelRidesUsingOfferId(string offerId)
         {
             if (BookingServices.CancelRides(offerId))
             {
@@ -147,9 +130,8 @@ namespace CarPoolWebAPI.Controllers
                 return false;
             }
         }
-        // GET: api/Bookings/ApproveRequests
         [HttpGet]
-        [Route("api/[controller]/requestId/Offer/{offerId}")]
+        [Route("ApproveRequests/{requestId}/Offer/{offerId}")]
         public bool ApproveRequests(string requestId, string offerId)
         {
             if (BookingServices.ApproveRequests(requestId, offerId))

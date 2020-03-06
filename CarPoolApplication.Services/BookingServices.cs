@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 using System.Linq;
 using CarPoolApplication.Models;
-using CarPoolDataBase;
+using CarPoolApplication.DataBase;
 using CarPoolApplication.Services.Intefaces;
 using AutoMapper;
 using AutoMapper.Configuration;
@@ -14,10 +14,7 @@ namespace CarPoolApplication.Services
 {
    public class BookingServices:IBooKingServices
     {
-        static readonly MapperConfiguration dbtoModelConfig = new MapperConfiguration(cfg => cfg.CreateMap<BookingTable, Booking>());
-        readonly IMapper dbtoModel = dbtoModelConfig.CreateMapper();
-        static readonly MapperConfiguration modelToDbConfig = new MapperConfiguration(cfg => cfg.CreateMap<Booking, BookingTable>());
-        readonly IMapper modelToDb = modelToDbConfig.CreateMapper();
+       
 
         readonly CarpoolDBContext Context;
        readonly IStationServices StationServices;
@@ -30,14 +27,14 @@ namespace CarPoolApplication.Services
         public List<Booking> GetAll()
         {
             List<BookingTable> bookingTable = Context.BookingTable.ToList();
-            List<Booking> bookings = dbtoModel.Map<List<BookingTable>, List<Booking>>(bookingTable);
+            List<Booking> bookings =AutoMapping.dbtoModelBooking.Map<List<BookingTable>, List<Booking>>(bookingTable);
             return bookings;
         }
         public bool AddRequest(Booking bookingRequest)
         {
             try
             {
-                BookingTable bookingTable = modelToDb.Map<Booking, BookingTable>(bookingRequest);
+                BookingTable bookingTable = AutoMapping.modelToDbBooking.Map<Booking, BookingTable>(bookingRequest);
                 Context.BookingTable.Add(bookingTable);
                 Context.SaveChanges();
                 return true;
@@ -51,7 +48,7 @@ namespace CarPoolApplication.Services
         {
             try
             {
-                BookingTable bookingTable = modelToDb.Map<Booking, BookingTable>(bookingRequest);
+                BookingTable bookingTable = AutoMapping.modelToDbBooking.Map<Booking, BookingTable>(bookingRequest);
                 Context.Entry(bookingTable).State = EntityState.Modified;
                 Context.SaveChanges();
                 return true;
@@ -66,7 +63,7 @@ namespace CarPoolApplication.Services
             try
             {
                 BookingTable request = Context.BookingTable.FirstOrDefault(request => string.Equals(request.Id, bookingId));
-                return dbtoModel.Map<BookingTable, Booking>(request);
+                return AutoMapping.dbtoModelBooking.Map<BookingTable, Booking>(request);
             }
             catch
             {
@@ -94,7 +91,7 @@ namespace CarPoolApplication.Services
             {
 
                 List<BookingTable> bookingTable = Context.BookingTable.Where(bookingrequests => string.Equals(bookingrequests.OfferId, offerId) && (bookingrequests.BookingStatus.Equals(BookingStatus.pending))).ToList();
-                return dbtoModel.Map<List<BookingTable>, List<Booking>>(bookingTable);
+                return AutoMapping.dbtoModelBooking.Map<List<BookingTable>, List<Booking>>(bookingTable);
             }
             catch
             {
@@ -107,7 +104,7 @@ namespace CarPoolApplication.Services
             try
             {
                 List<BookingTable> bookingTable = Context.BookingTable.Where(bookingrequests => string.Equals(bookingrequests.PassengerId, userId)).ToList();
-                return dbtoModel.Map<List<BookingTable>, List<Booking>>(bookingTable);
+                return AutoMapping.dbtoModelBooking.Map<List<BookingTable>, List<Booking>>(bookingTable);
             }
             catch
             {
@@ -166,7 +163,7 @@ namespace CarPoolApplication.Services
             try
             {
                 List<BookingTable> bookingTable = Context.BookingTable.Where(bookingrequests => string.Equals(bookingrequests.OfferId, offerId) && (bookingrequests.BookingStatus.Equals(BookingStatus.confirm))).ToList();
-                return dbtoModel.Map<List<BookingTable>, List<Booking>>(bookingTable);
+                return AutoMapping.dbtoModelBooking.Map<List<BookingTable>, List<Booking>>(bookingTable);
             }
             catch
             {

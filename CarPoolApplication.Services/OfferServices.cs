@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 using AutoMapper;
 using CarPoolApplication.Models;
-using CarPoolDataBase;
+using CarPoolApplication.DataBase;
 using  System.Linq;
 using CarPoolApplication.Services.Intefaces;
 using Microsoft.EntityFrameworkCore;
@@ -12,10 +12,7 @@ namespace CarPoolApplication.Services
 {
     public class OfferServices:IOfferServices
     {
-        static readonly MapperConfiguration dbtoModelConfig = new MapperConfiguration(cfg => cfg.CreateMap<OfferTable, Offer>());
-        readonly IMapper dbtoModel = dbtoModelConfig.CreateMapper();
-        static readonly MapperConfiguration modelToDbConfig = new MapperConfiguration(cfg => cfg.CreateMap<Offer, OfferTable>());
-        readonly IMapper modelToDb = modelToDbConfig.CreateMapper();
+       
         private readonly CarpoolDBContext Context;
         readonly IStationServices StationServices;
         public OfferServices(CarpoolDBContext context,IStationServices stationServices)
@@ -28,7 +25,7 @@ namespace CarPoolApplication.Services
             try
             {
                 List<OfferTable> offerTables = Context.OfferTable.ToList();
-                return dbtoModel.Map<List<OfferTable>, List<Offer>>(offerTables);
+                return AutoMapping.dbtoModelOffer.Map<List<OfferTable>, List<Offer>>(offerTables);
             }
             catch
             {
@@ -39,7 +36,7 @@ namespace CarPoolApplication.Services
         {
             try
             {
-                OfferTable offerTable = modelToDb.Map<Offer, OfferTable>(offer);
+                OfferTable offerTable = AutoMapping.modelToDbOffer.Map<Offer, OfferTable>(offer);
                 Context.OfferTable.Add(offerTable);
                 Context.SaveChanges();
                 return true;
@@ -53,7 +50,7 @@ namespace CarPoolApplication.Services
         {
             try
             {
-                OfferTable offerTable = modelToDb.Map<Offer, OfferTable>(offer);
+                OfferTable offerTable = AutoMapping.modelToDbOffer.Map<Offer, OfferTable>(offer);
                 Context.Entry(offerTable).State = EntityState.Modified;
                 Context.SaveChanges();
                 return true;
@@ -68,7 +65,7 @@ namespace CarPoolApplication.Services
             try
             {
                 List<OfferTable> offerTables = Context.OfferTable.Where(offer => string.Equals(offer.DriverId, userID) && offer.OfferStatus.Equals(OfferStatus.open)).ToList();
-                return dbtoModel.Map<List<OfferTable>, List<Offer>>(offerTables);
+                return AutoMapping.dbtoModelOffer.Map<List<OfferTable>, List<Offer>>(offerTables);
             }
             catch
             {
@@ -99,7 +96,7 @@ namespace CarPoolApplication.Services
                                 numberOfPoints = toStations[toIndex].StationNumber - fromStations[fromIndex].StationNumber;
                                 offerTable.Price = numberOfPoints * offerTable.CostperPoint;
                                 Context.SaveChanges();
-                                Offer offer= dbtoModel.Map<OfferTable,Offer>(offerTable);
+                                Offer offer= AutoMapping.dbtoModelOffer.Map<OfferTable,Offer>(offerTable);
                                 AvailableOffers.Add(offer);
                             }
                         }
@@ -132,7 +129,7 @@ namespace CarPoolApplication.Services
             try
             {
                 List<OfferTable> offerTables = Context.OfferTable.Where(offer => string.Equals(offer.DriverId, userID)).ToList();
-                return dbtoModel.Map<List<OfferTable>, List<Offer>>(offerTables);
+                return AutoMapping.dbtoModelOffer.Map<List<OfferTable>, List<Offer>>(offerTables);
             }
             catch
             {
@@ -191,7 +188,7 @@ namespace CarPoolApplication.Services
             try
             {
                 OfferTable offerTable = Context.OfferTable.FirstOrDefault(offer => string.Equals(offer.Id, offerId));
-                return dbtoModel.Map<OfferTable, Offer>(offerTable);
+                return AutoMapping.dbtoModelOffer.Map<OfferTable, Offer>(offerTable);
             }
             catch
             {

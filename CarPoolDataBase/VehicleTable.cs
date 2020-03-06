@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace CarPoolDataBase
+namespace CarPoolApplication.DataBase
 {
     public partial class VehicleTable
     {

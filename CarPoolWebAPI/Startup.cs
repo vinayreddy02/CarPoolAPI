@@ -12,7 +12,7 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using CarPoolApplication.Services;
 using CarPoolApplication.Services.Intefaces;
-using CarPoolDataBase;
+using CarPoolApplication.DataBase;
 using Microsoft.EntityFrameworkCore;
 
 namespace CarPoolWebAPI
