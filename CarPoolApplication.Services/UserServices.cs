@@ -13,8 +13,6 @@ namespace CarPoolApplication.Services
 {
    public class UserServices: IUserServices
     {    
-
-        
         private readonly CarpoolDBContext Context;
         public UserServices(CarpoolDBContext context)
         {
@@ -24,9 +22,7 @@ namespace CarPoolApplication.Services
         {
             try
             {
-                List<UserTable> userTables = Context.UserTable.ToList();
-                List<User> users =AutoMapping.dbtoModelUser.Map<List<UserTable>, List<User>>(userTables);
-                return users;
+                return AutoMapping.dbtoModelUser.Map<List<UserTable>, List<User>>(Context.UserTable.ToList());               
             }
             catch
             {
@@ -37,28 +33,22 @@ namespace CarPoolApplication.Services
         {
             try
             {
-                UserTable userTable = AutoMapping.modelToDbUser.Map<User, UserTable>(user);
-                Context.UserTable.Add(userTable);
-                Context.SaveChanges();
-                return true;
+                Context.UserTable.Add(AutoMapping.modelToDbUser.Map<User, UserTable>(user));
+                return Context.SaveChanges() > 0;
             }
             catch
             {
                 return false;
             }
-
         }
         public User GetUser(string userId)
         {
             try
             {
-                UserTable userTable = Context.UserTable.FirstOrDefault(user => string.Equals(user.Id, userId));
-                User user = AutoMapping.dbtoModelUser.Map<UserTable, User>(userTable);
-                return user;
+                return AutoMapping.dbtoModelUser.Map<UserTable, User>(Context.UserTable.FirstOrDefault(user => string.Equals(user.Id, userId)));               
             }
             catch
             {
-                
                 return null;
             }
         }
@@ -67,9 +57,7 @@ namespace CarPoolApplication.Services
             try
             {
                 Context.Remove(Context.UserTable.FirstOrDefault(user => string.Equals(user.Id, userId)));
-                // Context.UserTable.Remove(userTable);
-                Context.SaveChanges();
-                return true;
+                return Context.SaveChanges() > 0;
             }
             catch
             {
@@ -80,10 +68,8 @@ namespace CarPoolApplication.Services
         {
             try
             {
-                UserTable userTable = AutoMapping.modelToDbUser.Map<User, UserTable>(user);
-                Context.Entry(userTable).State = EntityState.Modified;
-                Context.SaveChanges();
-                return true;
+                Context.Entry(AutoMapping.modelToDbUser.Map<User, UserTable>(user)).State = EntityState.Modified;
+                return Context.SaveChanges() > 0;
             }
             catch
             {

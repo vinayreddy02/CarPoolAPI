@@ -12,8 +12,6 @@ namespace CarPoolApplication.Services
 {
     public class StationServices:IStationServices
     {
-      
-
         private readonly CarpoolDBContext Context;
         public StationServices(CarpoolDBContext context)
         {
@@ -23,10 +21,8 @@ namespace CarPoolApplication.Services
         {
             try
             {
-                StationTable stationTable =AutoMapping.modelToDbStation.Map<Station, StationTable>(place);
-                Context.StationTable.Add(stationTable);
-                Context.SaveChanges();
-                return true;
+                Context.StationTable.Add(AutoMapping.modelToDbStation.Map<Station, StationTable>(place));
+                return Context.SaveChanges() > 0;
             }
             catch
             {
@@ -37,10 +33,8 @@ namespace CarPoolApplication.Services
         {
             try
             {
-                StationTable stationTable = AutoMapping.modelToDbStation.Map<Station, StationTable>(place);
-                Context.Entry(stationTable).State = EntityState.Modified;
-                Context.SaveChanges();
-                return true;
+                Context.Entry(AutoMapping.modelToDbStation.Map<Station, StationTable>(place)).State = EntityState.Modified;
+                return Context.SaveChanges() > 0;
             }
             catch
             {
@@ -51,8 +45,7 @@ namespace CarPoolApplication.Services
         {
             try
             {
-                List<StationTable> stationTables = Context.StationTable.ToList();
-                return AutoMapping.dbtoModelStation.Map<List<StationTable>, List<Station>>(stationTables);
+                return AutoMapping.dbtoModelStation.Map<List<StationTable>, List<Station>>(Context.StationTable.ToList());
             }
             catch
             {
@@ -63,8 +56,7 @@ namespace CarPoolApplication.Services
         {
             try
             {
-                List<StationTable> stationTables = Context.StationTable.Where(station => string.Equals(station.Id, placeID)).ToList();
-                return AutoMapping.dbtoModelStation.Map<List<StationTable>, List<Station>>(stationTables);
+                return AutoMapping.dbtoModelStation.Map<List<StationTable>, List<Station>>(Context.StationTable.Where(station => string.Equals(station.Id, placeID)).ToList());
             }
             catch
             {
@@ -75,8 +67,7 @@ namespace CarPoolApplication.Services
         {
             try
             {
-                List<StationTable> stationTables = Context.StationTable.Where(station => string.Equals(station.OfferId, offerID)).ToList();
-                return AutoMapping.dbtoModelStation.Map<List<StationTable>, List<Station>>(stationTables);
+                return AutoMapping.dbtoModelStation.Map<List<StationTable>, List<Station>>(Context.StationTable.Where(station => string.Equals(station.OfferId, offerID)).ToList());
             }
             catch
             {
@@ -87,8 +78,7 @@ namespace CarPoolApplication.Services
         {
             try
             {
-                StationTable stationTable = Context.StationTable.FirstOrDefault(station => string.Equals(station.Id, stationId));
-                return AutoMapping.dbtoModelStation.Map<StationTable, Station>(stationTable);
+                return AutoMapping.dbtoModelStation.Map<StationTable, Station>(Context.StationTable.FirstOrDefault(station => string.Equals(station.Id, stationId)));
             }
             catch
             {
@@ -99,11 +89,8 @@ namespace CarPoolApplication.Services
         {
             try
             {
-                StationTable stationTable = Context.StationTable.FirstOrDefault(station => string.Equals(station.Id, stationId));
-
-                Context.StationTable.Remove(stationTable);
-                Context.SaveChanges();
-                return true;
+                Context.StationTable.Remove(Context.StationTable.FirstOrDefault(station => string.Equals(station.Id, stationId)));
+                return Context.SaveChanges() > 0;
             }
             catch
             {

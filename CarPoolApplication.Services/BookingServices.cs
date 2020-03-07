@@ -9,35 +9,28 @@ using AutoMapper;
 using AutoMapper.Configuration;
 using Microsoft.EntityFrameworkCore;
 
-
 namespace CarPoolApplication.Services
 {
    public class BookingServices:IBooKingServices
-    {
-       
-
+    {      
         readonly CarpoolDBContext Context;
        readonly IStationServices StationServices;
         public BookingServices(CarpoolDBContext context, IStationServices stationServices)
         {
             Context = context;
             StationServices = stationServices;
-        }
-     
+        }    
         public List<Booking> GetAll()
         {
-            List<BookingTable> bookingTable = Context.BookingTable.ToList();
-            List<Booking> bookings =AutoMapping.dbtoModelBooking.Map<List<BookingTable>, List<Booking>>(bookingTable);
+            List<Booking> bookings =AutoMapping.dbtoModelBooking.Map<List<BookingTable>, List<Booking>>(Context.BookingTable.ToList());
             return bookings;
         }
         public bool AddRequest(Booking bookingRequest)
         {
             try
             {
-                BookingTable bookingTable = AutoMapping.modelToDbBooking.Map<Booking, BookingTable>(bookingRequest);
-                Context.BookingTable.Add(bookingTable);
-                Context.SaveChanges();
-                return true;
+                Context.BookingTable.Add(AutoMapping.modelToDbBooking.Map<Booking, BookingTable>(bookingRequest));
+                return Context.SaveChanges() > 0;              
             }
             catch
             {
@@ -48,10 +41,8 @@ namespace CarPoolApplication.Services
         {
             try
             {
-                BookingTable bookingTable = AutoMapping.modelToDbBooking.Map<Booking, BookingTable>(bookingRequest);
-                Context.Entry(bookingTable).State = EntityState.Modified;
-                Context.SaveChanges();
-                return true;
+                Context.Entry(AutoMapping.modelToDbBooking.Map<Booking, BookingTable>(bookingRequest)).State = EntityState.Modified;
+                return Context.SaveChanges() > 0;
             }
             catch
             {
@@ -62,8 +53,7 @@ namespace CarPoolApplication.Services
         {
             try
             {
-                BookingTable request = Context.BookingTable.FirstOrDefault(request => string.Equals(request.Id, bookingId));
-                return AutoMapping.dbtoModelBooking.Map<BookingTable, Booking>(request);
+                return AutoMapping.dbtoModelBooking.Map<BookingTable, Booking>(Context.BookingTable.FirstOrDefault(request => string.Equals(request.Id, bookingId)));
             }
             catch
             {
@@ -74,11 +64,8 @@ namespace CarPoolApplication.Services
         {
             try
             {
-                BookingTable request = Context.BookingTable.FirstOrDefault(request => string.Equals(request.Id, bookingId));
-
-                Context.BookingTable.Remove(request);
-                Context.SaveChanges();
-                return true;
+                Context.BookingTable.Remove(Context.BookingTable.FirstOrDefault(request => string.Equals(request.Id, bookingId)));
+                return Context.SaveChanges() > 0;
             }
             catch
             {
@@ -89,22 +76,18 @@ namespace CarPoolApplication.Services
         {
             try
             {
-
-                List<BookingTable> bookingTable = Context.BookingTable.Where(bookingrequests => string.Equals(bookingrequests.OfferId, offerId) && (bookingrequests.BookingStatus.Equals(BookingStatus.pending))).ToList();
-                return AutoMapping.dbtoModelBooking.Map<List<BookingTable>, List<Booking>>(bookingTable);
+                return AutoMapping.dbtoModelBooking.Map<List<BookingTable>, List<Booking>>(Context.BookingTable.Where(bookingrequests => string.Equals(bookingrequests.OfferId, offerId) && (bookingrequests.BookingStatus.Equals(BookingStatus.pending))).ToList());
             }
             catch
             {
                 return null;
             }
-        }
-        
+        }        
         public List<Booking> GetAllbookings(string userId)
         {
             try
             {
-                List<BookingTable> bookingTable = Context.BookingTable.Where(bookingrequests => string.Equals(bookingrequests.PassengerId, userId)).ToList();
-                return AutoMapping.dbtoModelBooking.Map<List<BookingTable>, List<Booking>>(bookingTable);
+                return AutoMapping.dbtoModelBooking.Map<List<BookingTable>, List<Booking>>(Context.BookingTable.Where(bookingrequests => string.Equals(bookingrequests.PassengerId, userId)).ToList());
             }
             catch
             {
@@ -135,42 +118,37 @@ namespace CarPoolApplication.Services
                         if (stations[fromIndex].StationNumber < stations[toIndex].StationNumber)
                         {
                             numberOfPoints = stations[toIndex].StationNumber - stations[fromIndex].StationNumber;
-                            
+
                             request.Price = numberOfPoints * offer.CostperPoint* request.NumberOfSeats;
                             request.BookingStatus = BookingStatus.confirm.ToString();
                             offer.NumberOfSeats -= request.NumberOfSeats;
                             if (offer.NumberOfSeats == 0)
                             {
                                 offer.OfferStatus = OfferStatus.close.ToString();
-                            }
-                            Context.SaveChanges();
+                            }                          
                         }
                         fromIndex = -1;
                         toIndex = -1;
-
                     }
                 }
-                return true;
+                return Context.SaveChanges() > 0;
             }
             catch
             {
                 return false;
             }
-
         }
         public List<Booking> GetAllRidesToStart(string offerId)
         {
             try
             {
-                List<BookingTable> bookingTable = Context.BookingTable.Where(bookingrequests => string.Equals(bookingrequests.OfferId, offerId) && (bookingrequests.BookingStatus.Equals(BookingStatus.confirm))).ToList();
-                return AutoMapping.dbtoModelBooking.Map<List<BookingTable>, List<Booking>>(bookingTable);
+                return AutoMapping.dbtoModelBooking.Map<List<BookingTable>, List<Booking>>(Context.BookingTable.Where(bookingrequests => string.Equals(bookingrequests.OfferId, offerId) && (bookingrequests.BookingStatus.Equals(BookingStatus.confirm))).ToList());
             }
             catch
             {
                 return null;
             }
         }
-
         public bool StartRides(string offerId)
         {
             try
@@ -180,8 +158,7 @@ namespace CarPoolApplication.Services
                 {
                     booking.BookingStatus = BookingStatus.running.ToString();
                 }
-                Context.SaveChanges();
-                return true;
+                return Context.SaveChanges() > 0;
             }
             catch
             {
@@ -189,7 +166,6 @@ namespace CarPoolApplication.Services
             }
         }
         public bool EndRides(string offerID)
-
         {
             try
             {
@@ -198,8 +174,7 @@ namespace CarPoolApplication.Services
                 {
                     booking.BookingStatus = BookingStatus.compleated.ToString();
                 }
-                Context.SaveChanges();
-                return true;
+                return Context.SaveChanges() > 0;
             }
             catch
             {
@@ -215,8 +190,7 @@ namespace CarPoolApplication.Services
                 {
                     booking.BookingStatus = BookingStatus.cancel.ToString();
                 }
-                Context.SaveChanges();
-                return true;
+                return Context.SaveChanges() > 0;
             }
             catch
             {

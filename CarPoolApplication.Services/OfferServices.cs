@@ -24,8 +24,7 @@ namespace CarPoolApplication.Services
         {
             try
             {
-                List<OfferTable> offerTables = Context.OfferTable.ToList();
-                return AutoMapping.dbtoModelOffer.Map<List<OfferTable>, List<Offer>>(offerTables);
+                return AutoMapping.dbtoModelOffer.Map<List<OfferTable>, List<Offer>>(Context.OfferTable.ToList());
             }
             catch
             {
@@ -36,10 +35,8 @@ namespace CarPoolApplication.Services
         {
             try
             {
-                OfferTable offerTable = AutoMapping.modelToDbOffer.Map<Offer, OfferTable>(offer);
-                Context.OfferTable.Add(offerTable);
-                Context.SaveChanges();
-                return true;
+                Context.OfferTable.Add(AutoMapping.modelToDbOffer.Map<Offer, OfferTable>(offer));
+                return Context.SaveChanges() > 0;
             }
             catch
             {
@@ -50,10 +47,8 @@ namespace CarPoolApplication.Services
         {
             try
             {
-                OfferTable offerTable = AutoMapping.modelToDbOffer.Map<Offer, OfferTable>(offer);
-                Context.Entry(offerTable).State = EntityState.Modified;
-                Context.SaveChanges();
-                return true;
+                Context.Entry(AutoMapping.modelToDbOffer.Map<Offer, OfferTable>(offer)).State = EntityState.Modified;
+                return Context.SaveChanges() > 0;
             }
             catch
             {
@@ -64,8 +59,7 @@ namespace CarPoolApplication.Services
         {
             try
             {
-                List<OfferTable> offerTables = Context.OfferTable.Where(offer => string.Equals(offer.DriverId, userID) && offer.OfferStatus.Equals(OfferStatus.open)).ToList();
-                return AutoMapping.dbtoModelOffer.Map<List<OfferTable>, List<Offer>>(offerTables);
+                return AutoMapping.dbtoModelOffer.Map<List<OfferTable>, List<Offer>>(Context.OfferTable.Where(offer => string.Equals(offer.DriverId, userID) && offer.OfferStatus.Equals(OfferStatus.open)).ToList());
             }
             catch
             {
@@ -115,8 +109,7 @@ namespace CarPoolApplication.Services
             {
                 OfferTable offerTable = Context.OfferTable.FirstOrDefault(offer => string.Equals(offer.Id, offerId));
                 offerTable.RideStatus = RideStatus.Compleated.ToString();
-                Context.SaveChanges();
-                return true;
+                return Context.SaveChanges() > 0;
             }
             catch
             {
@@ -128,8 +121,7 @@ namespace CarPoolApplication.Services
         {
             try
             {
-                List<OfferTable> offerTables = Context.OfferTable.Where(offer => string.Equals(offer.DriverId, userID)).ToList();
-                return AutoMapping.dbtoModelOffer.Map<List<OfferTable>, List<Offer>>(offerTables);
+                return AutoMapping.dbtoModelOffer.Map<List<OfferTable>, List<Offer>>(Context.OfferTable.Where(offer => string.Equals(offer.DriverId, userID)).ToList());
             }
             catch
             {
@@ -147,8 +139,7 @@ namespace CarPoolApplication.Services
                 {
                     offerTable.OfferStatus = OfferStatus.close.ToString();
                 }
-                Context.SaveChanges();
-                return true;
+                return Context.SaveChanges() > 0;
             }
             catch
             {
@@ -160,8 +151,7 @@ namespace CarPoolApplication.Services
             try
             {    OfferTable offerTable = Context.OfferTable.FirstOrDefault(offer => string.Equals(offer.Id, offerId));
                 offerTable.OfferStatus = OfferStatus.close.ToString();
-                Context.SaveChanges();
-                return true;
+                return Context.SaveChanges() > 0;
             }
             catch
             {
@@ -175,8 +165,7 @@ namespace CarPoolApplication.Services
                 OfferTable offerTable = Context.OfferTable.FirstOrDefault(offer => string.Equals(offer.Id, offerId));
                 offerTable.RideStatus = RideStatus.cancel.ToString();
                 offerTable.OfferStatus = OfferStatus.close.ToString();
-                Context.SaveChanges();
-                return true;
+                return Context.SaveChanges() > 0;
             }
             catch
             {
@@ -187,8 +176,7 @@ namespace CarPoolApplication.Services
         {
             try
             {
-                OfferTable offerTable = Context.OfferTable.FirstOrDefault(offer => string.Equals(offer.Id, offerId));
-                return AutoMapping.dbtoModelOffer.Map<OfferTable, Offer>(offerTable);
+                return AutoMapping.dbtoModelOffer.Map<OfferTable, Offer>(Context.OfferTable.FirstOrDefault(offer => string.Equals(offer.Id, offerId)));
             }
             catch
             {
@@ -199,10 +187,8 @@ namespace CarPoolApplication.Services
         {
             try
             {
-                OfferTable offerTable = Context.OfferTable.FirstOrDefault(offer => string.Equals(offer.Id, offerId));
-                Context.OfferTable.Remove(offerTable);
-                Context.SaveChanges();
-                return true;
+                Context.OfferTable.Remove(Context.OfferTable.FirstOrDefault(offer => string.Equals(offer.Id, offerId)));
+                return Context.SaveChanges() > 0;
             }
             catch
             {

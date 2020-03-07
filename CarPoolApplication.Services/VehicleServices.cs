@@ -12,9 +12,7 @@ using Microsoft.EntityFrameworkCore;
 namespace CarPoolApplication.Services
 {
     public class VehicleServices:IVehicleServices
-    {
-      
-
+    {     
         private readonly CarpoolDBContext Context;
         public VehicleServices(CarpoolDBContext context)
         {
@@ -24,10 +22,8 @@ namespace CarPoolApplication.Services
         public List<Vehicle> GetVehicles()
         {
             try
-            {
-                List<VehicleTable> vehicleTables = Context.VehicleTable.ToList();
-                return AutoMapping.dbtoModelVehicle.Map<List<VehicleTable>, List<Vehicle>>(vehicleTables);
-           
+            {              
+                return AutoMapping.dbtoModelVehicle.Map<List<VehicleTable>, List<Vehicle>>(Context.VehicleTable.ToList());           
             }
             catch
             {
@@ -38,10 +34,8 @@ namespace CarPoolApplication.Services
         {
             try
             {
-                VehicleTable vehicleTable = AutoMapping.modelToDbVehicle.Map<Vehicle, VehicleTable>(vehicle);
-                Context.VehicleTable.Add(vehicleTable);
-                Context.SaveChanges();
-                return true;
+                Context.VehicleTable.Add(AutoMapping.modelToDbVehicle.Map<Vehicle, VehicleTable>(vehicle));
+                return Context.SaveChanges() > 0;
             }
             catch
             {
@@ -53,10 +47,8 @@ namespace CarPoolApplication.Services
         {
             try
             {
-                VehicleTable vehicleTable = AutoMapping.modelToDbVehicle.Map<Vehicle, VehicleTable>(vehicle);
-                Context.Entry(vehicleTable).State = EntityState.Modified;
-                Context.SaveChanges();
-                return true;
+                Context.Entry(AutoMapping.modelToDbVehicle.Map<Vehicle, VehicleTable>(vehicle)).State = EntityState.Modified;
+                return Context.SaveChanges() > 0;
             }
             catch
             {
@@ -67,9 +59,7 @@ namespace CarPoolApplication.Services
         {
             try
             {
-                VehicleTable vehicleTable = Context.VehicleTable.FirstOrDefault(vehicle => string.Equals(vehicle.Id, vehicleId));
-                return AutoMapping.dbtoModelVehicle.Map<VehicleTable, Vehicle>(vehicleTable);
-   
+                return AutoMapping.dbtoModelVehicle.Map<VehicleTable, Vehicle>(Context.VehicleTable.FirstOrDefault(vehicle => string.Equals(vehicle.Id, vehicleId)));   
             }
             catch
             {
@@ -80,12 +70,8 @@ namespace CarPoolApplication.Services
         {
             try
             {
-                VehicleTable vehicleTable = Context.VehicleTable.FirstOrDefault(vehicle => string.Equals(vehicle.Id, vehicleId));
-
-                Context.VehicleTable.Remove(vehicleTable);
-
-                Context.SaveChanges();
-                return true;
+                Context.VehicleTable.Remove(Context.VehicleTable.FirstOrDefault(vehicle => string.Equals(vehicle.Id, vehicleId)));
+                return Context.SaveChanges() > 0;
             }
             catch
             {

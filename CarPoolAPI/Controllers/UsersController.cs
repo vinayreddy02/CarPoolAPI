@@ -19,77 +19,36 @@ namespace CarPoolApplication.API.Controllers
         {
             UserServices = services;
         }
-        // GET: api/Users
         [HttpGet]        
         public List<User> GetUsers()
         {
             return UserServices.GetAll();
         }
-        // POST: api/Users
         [HttpPost]
         public bool PostUser(User user)
         {
-            if (UserServices.AddUser(user))
-            {
-                return true;
-            }
-            else
-            {
-                return false;
-            }
+            return UserServices.AddUser(user);           
         }
-        // GET: api/Users/5
         [HttpGet("{id}")]
         public User GetUser(string id)
         {
             return UserServices.GetUser(id);
         }
-        // DELETE: api/Users/5
         [HttpDelete("{id}")]
         public bool DeleteUser(string id)
         {
-            if (UserServices.DeleteUser(id))
-            {
-                return true;
-            }
-            else
-            {
-                return false;
-            }
+            return UserServices.DeleteUser(id);          
         }
-        // PUT: api/Users/5
         [HttpPut("{id}")]
-        public string PutUser(string id, User user)
+        public bool UpdateUser(string id, User user)
         {
-            if (id != user.Id)
-            {
-                return "user does not exists";
-            }
-            else
-            {
-                if (UserServices.UpdateUser(user))
-                {
-                    return "updated";
-                }
-                else
-                {
-                    return "Update failed";
-                }
-            }
+            return UserServices.UpdateUser(user);             
         }
-        // POST: api/Users
         [HttpGet]
         [Route("IsvalidUser/{id}/{password}")]
         public bool IsValidUser(string id, string password)
         {
-            if(UserServices.IsValidUser(id, password))
-            {
-                return true;
-            }
-            else
-            {
-                return false;
-            }
+            return UserServices.IsValidUser(id, password);          
         }
     }
 }
