@@ -7,7 +7,7 @@ namespace CarPoolApplication.Services.Intefaces
 {
    public interface IUserServices
     {
-        public List<User> GetAll();
+        public List<User> GetAllUsers();
         public bool AddUser(User user);
         public User GetUser(string userId);
         public bool DeleteUser(string userId);

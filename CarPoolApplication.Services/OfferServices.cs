@@ -11,8 +11,7 @@ using Microsoft.EntityFrameworkCore;
 namespace CarPoolApplication.Services
 {
     public class OfferServices:IOfferServices
-    {
-       
+    {       
         private readonly CarpoolDBContext Context;
         readonly IStationServices StationServices;
         public OfferServices(CarpoolDBContext context,IStationServices stationServices)
@@ -20,11 +19,11 @@ namespace CarPoolApplication.Services
             Context = context;
             StationServices = stationServices;
         }
-        public List<Offer> GetAll()
+        public List<Offer> GetAllOffers()
         {
             try
             {
-                return AutoMapping.dbtoModelOffer.Map<List<OfferTable>, List<Offer>>(Context.OfferTable.ToList());
+                return AutoMapping.DbtoModelOffer.Map<List<OfferTable>, List<Offer>>(Context.OfferTable.ToList());
             }
             catch
             {
@@ -35,7 +34,7 @@ namespace CarPoolApplication.Services
         {
             try
             {
-                Context.OfferTable.Add(AutoMapping.modelToDbOffer.Map<Offer, OfferTable>(offer));
+                Context.OfferTable.Add(AutoMapping.ModelToDbOffer.Map<Offer, OfferTable>(offer));
                 return Context.SaveChanges() > 0;
             }
             catch
@@ -47,7 +46,7 @@ namespace CarPoolApplication.Services
         {
             try
             {
-                Context.Entry(AutoMapping.modelToDbOffer.Map<Offer, OfferTable>(offer)).State = EntityState.Modified;
+                Context.Entry(AutoMapping.ModelToDbOffer.Map<Offer, OfferTable>(offer)).State = EntityState.Modified;
                 return Context.SaveChanges() > 0;
             }
             catch
@@ -55,11 +54,11 @@ namespace CarPoolApplication.Services
                 return false;
             }
         }
-        public List<Offer> GetOffers(string userID)
+        public List<Offer> GetOffersByUserId(string userId)
         {
             try
             {
-                return AutoMapping.dbtoModelOffer.Map<List<OfferTable>, List<Offer>>(Context.OfferTable.Where(offer => string.Equals(offer.DriverId, userID) && offer.OfferStatus.Equals(OfferStatus.open)).ToList());
+                return AutoMapping.DbtoModelOffer.Map<List<OfferTable>, List<Offer>>(Context.OfferTable.Where(offer => string.Equals(offer.DriverId, userId) && offer.OfferStatus.Equals(OfferStatus.open)).ToList());
             }
             catch
             {
@@ -90,7 +89,7 @@ namespace CarPoolApplication.Services
                                 numberOfPoints = toStations[toIndex].StationNumber - fromStations[fromIndex].StationNumber;
                                 offerTable.Price = numberOfPoints * offerTable.CostperPoint;
                                 Context.SaveChanges();
-                                Offer offer= AutoMapping.dbtoModelOffer.Map<OfferTable,Offer>(offerTable);
+                                Offer offer= AutoMapping.DbtoModelOffer.Map<OfferTable,Offer>(offerTable);
                                 AvailableOffers.Add(offer);
                             }
                         }
@@ -117,11 +116,11 @@ namespace CarPoolApplication.Services
             }
 
         }
-        public List<Offer> GetAllOffers(string userID)
+        public List<Offer> GetAllOffersByUserId(string userID)
         {
             try
             {
-                return AutoMapping.dbtoModelOffer.Map<List<OfferTable>, List<Offer>>(Context.OfferTable.Where(offer => string.Equals(offer.DriverId, userID)).ToList());
+                return AutoMapping.DbtoModelOffer.Map<List<OfferTable>, List<Offer>>(Context.OfferTable.Where(offer => string.Equals(offer.DriverId, userID)).ToList());
             }
             catch
             {
@@ -176,7 +175,7 @@ namespace CarPoolApplication.Services
         {
             try
             {
-                return AutoMapping.dbtoModelOffer.Map<OfferTable, Offer>(Context.OfferTable.FirstOrDefault(offer => string.Equals(offer.Id, offerId)));
+                return AutoMapping.DbtoModelOffer.Map<OfferTable, Offer>(Context.OfferTable.FirstOrDefault(offer => string.Equals(offer.Id, offerId)));
             }
             catch
             {

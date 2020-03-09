@@ -12,7 +12,6 @@ namespace CarPoolApplication.Services
 {
     public class LocationServices:ILocationServices
     {
-        
         private readonly CarpoolDBContext Context;
         public LocationServices(CarpoolDBContext context)
         {
@@ -22,7 +21,7 @@ namespace CarPoolApplication.Services
         {
             try
             {
-                Context.LocationTable.Add(AutoMapping.modelToDbLocation.Map<Location, LocationTable>(place));
+                Context.LocationTable.Add(AutoMapping.ModelToDbLocation.Map<Location, LocationTable>(place));
                 return Context.SaveChanges() > 0;
             }
             catch
@@ -34,7 +33,7 @@ namespace CarPoolApplication.Services
         {
             try
             {
-                Context.Entry(AutoMapping.modelToDbLocation.Map<Location, LocationTable>(place)).State = EntityState.Modified;
+                Context.Entry(AutoMapping.ModelToDbLocation.Map<Location, LocationTable>(place)).State = EntityState.Modified;
                 return Context.SaveChanges() > 0;
             }
             catch
@@ -42,11 +41,11 @@ namespace CarPoolApplication.Services
                 return false;
             }
         }
-        public List<Location> GetAll()
+        public List<Location> GetAllLocations()
         {
             try
             {
-                return AutoMapping.dbtoModelLocation.Map<List<LocationTable>, List<Location>>(Context.LocationTable.ToList());
+                return AutoMapping.DbtoModelLocation.Map<List<LocationTable>, List<Location>>(Context.LocationTable.ToList());
             }
             catch
             {
@@ -57,7 +56,7 @@ namespace CarPoolApplication.Services
         {
             try
             {
-                return AutoMapping.dbtoModelLocation.Map<List<LocationTable>, List<Location>>(Context.LocationTable.Where(location => string.Equals(location.Place, place)).ToList());
+                return AutoMapping.DbtoModelLocation.Map<List<LocationTable>, List<Location>>(Context.LocationTable.Where(location => string.Equals(location.Place, place)).ToList());
             }
             catch
             {
@@ -68,7 +67,7 @@ namespace CarPoolApplication.Services
         {
             try
             {
-                return AutoMapping.dbtoModelLocation.Map<LocationTable, Location>(Context.LocationTable.FirstOrDefault(location => string.Equals(location.Id, LocationID)));
+                return AutoMapping.DbtoModelLocation.Map<LocationTable, Location>(Context.LocationTable.FirstOrDefault(location => string.Equals(location.Id, LocationID)));
              }
             catch
             {

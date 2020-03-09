@@ -22,10 +22,10 @@ namespace CarPoolApplication.API.Controllers
         [HttpGet]        
         public List<User> GetUsers()
         {
-            return UserServices.GetAll();
+            return UserServices.GetAllUsers();
         }
         [HttpPost]
-        public bool PostUser(User user)
+        public User AddUser(User user)
         {
             return UserServices.AddUser(user);           
         }

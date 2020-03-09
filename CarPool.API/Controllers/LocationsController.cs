@@ -22,7 +22,7 @@ namespace CarPoolApplication.API.Controllers
         [HttpGet]
         public List<Location> GetLocations()
         {
-            return locationServices.GetAll();
+            return locationServices.GetAllLocations();
         }
         [HttpPost]
         public bool AddLocation(Location location)

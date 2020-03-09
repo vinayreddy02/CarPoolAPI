@@ -18,11 +18,11 @@ namespace CarPoolApplication.Services
         {
             Context = context;
         }
-        public List<User> GetAll()
+        public List<User> GetAllUsers()
         {
             try
             {
-                return AutoMapping.dbtoModelUser.Map<List<UserTable>, List<User>>(Context.UserTable.ToList());               
+                return AutoMapping.DbtoModelUser.Map<List<UserTable>, List<User>>(Context.UserTable.ToList());               
             }
             catch
             {
@@ -33,8 +33,9 @@ namespace CarPoolApplication.Services
         {
             try
             {
-                Context.UserTable.Add(AutoMapping.modelToDbUser.Map<User, UserTable>(user));
+                Context.UserTable.Add(AutoMapping.ModelToDbUser.Map<User, UserTable>(user));
                 return Context.SaveChanges() > 0;
+               
             }
             catch
             {
@@ -45,7 +46,7 @@ namespace CarPoolApplication.Services
         {
             try
             {
-                return AutoMapping.dbtoModelUser.Map<UserTable, User>(Context.UserTable.FirstOrDefault(user => string.Equals(user.Id, userId)));               
+                return AutoMapping.DbtoModelUser.Map<UserTable, User>(Context.UserTable.FirstOrDefault(user => string.Equals(user.Id, userId)));               
             }
             catch
             {
@@ -68,7 +69,7 @@ namespace CarPoolApplication.Services
         {
             try
             {
-                Context.Entry(AutoMapping.modelToDbUser.Map<User, UserTable>(user)).State = EntityState.Modified;
+                Context.Entry(AutoMapping.ModelToDbUser.Map<User, UserTable>(user)).State = EntityState.Modified;
                 return Context.SaveChanges() > 0;
             }
             catch
@@ -80,9 +81,6 @@ namespace CarPoolApplication.Services
         {
             return Context.UserTable.Any(user => string.Equals(user.Id, Id) && string.Equals(user.Password, password));
         }
-        public bool UserExists(string userID)
-        {
-            return Context.UserTable.Any(user => string.Equals(user.Id, userID));
-        }
+      
     }
 }

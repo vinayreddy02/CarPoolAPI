@@ -8,7 +8,7 @@ namespace CarPoolApplication.Services.Intefaces
    public interface IStationServices
     {
         public bool AddStation(Station place);    
-        public List<Station> GetAll();
+        public List<Station> GetAllStations();
         public List<Station> GetStations(string placeId);
         public bool DeleteStation(string stationId);
         public Station GetStation(string stationId);

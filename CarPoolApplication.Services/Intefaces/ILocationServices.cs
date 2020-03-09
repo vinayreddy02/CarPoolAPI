@@ -9,7 +9,7 @@ namespace CarPoolApplication.Services.Intefaces
     {
         public bool AddLocation(Location place);
         public List<Location> GetLocations(string place);
-        public List<Location> GetAll();
+        public List<Location> GetAllLocations();
         public bool DeleteLocation(string LocationID);
         public Location GetLocation(string LocationID);
         public bool UpdateLocation(Location place);

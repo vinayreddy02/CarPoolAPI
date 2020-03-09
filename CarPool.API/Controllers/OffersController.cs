@@ -22,10 +22,10 @@ namespace CarPoolApplication.API.Controllers
         [HttpGet]
         public List<Offer> GetOffers()
         {
-            return OfferServices.GetAll();
+            return OfferServices.GetAllOffers();
         }
         [HttpPost]
-        public bool AddUser(Offer offer)
+        public Offer AddOffer(Offer offer)
         {
             return OfferServices.AddOffer(offer);           
         }
@@ -45,8 +45,8 @@ namespace CarPoolApplication.API.Controllers
             return OfferServices.UpdateOffer(offer);                      
         }
         [HttpGet]
-        [Route("AllAvailableOffers/{fromLocationId}/{toLocationId}/{numberOfSeats:int}/{dateTime:DateTime}")]
-        public List<Offer> AllAvailableOffers(string fromLocationId, string toLocationId, int numberOfSeats, DateTime dateTime)
+        [Route("GetAllAvailableOffers/{fromLocationId}/{toLocationId}/{numberOfSeats:int}/{dateTime:DateTime}")]
+        public List<Offer> GetAllAvailableOffers(string fromLocationId, string toLocationId, int numberOfSeats, DateTime dateTime)
         {
             return OfferServices.GetAvilableOffers(fromLocationId, toLocationId, numberOfSeats, dateTime);
         }
@@ -75,10 +75,16 @@ namespace CarPoolApplication.API.Controllers
             return OfferServices.StartRide(offerId);          
         }
         [HttpGet]
-        [Route("GetOffersUsingUserId/{userId}")]
-        public List<Offer> GetOffersUsingUserId(string userId)
+        [Route("GetAllOffersUsingUserId/{userId}")]
+        public List<Offer> GetAllOfferByUserId(string userId)
         {
-            return OfferServices.GetOffers(userId);
+            return OfferServices.GetAllOffersByUserId(userId);
+        }
+        [HttpGet]
+        [Route("GetOffersUsingUserId/{userId}")]
+        public List<Offer> GetOffersByUserId(string userId)
+        {
+            return OfferServices.GetOffersByUserId(userId);
         }
     }
 }

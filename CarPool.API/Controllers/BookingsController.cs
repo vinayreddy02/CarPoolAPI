@@ -22,7 +22,7 @@ namespace CarPoolApplication.API.Controllers
         [HttpGet]        
         public List<Booking> GetBookings()
         {
-            return BookingServices.GetAll();
+            return BookingServices.GetAllBookings();
         }
         [HttpGet("{id}")]
         public Booking GetBooking(string id)
@@ -32,7 +32,7 @@ namespace CarPoolApplication.API.Controllers
         [HttpPost]
         public bool AddBooking(Booking booking)
         {
-            return BookingServices.AddRequest(booking);          
+            return BookingServices.AddBooking(booking);          
         }
         [HttpDelete("{id}")]       
         public bool DeleteBooking(string id)
@@ -42,13 +42,13 @@ namespace CarPoolApplication.API.Controllers
         [HttpPut]
         public bool UpdateBooking(Booking booking)
         {       
-                return BookingServices.UpdateBooking(booking);               
+            return BookingServices.UpdateBooking(booking);               
         }     
         [HttpGet]
-        [Route("GetBookingsWithUserId/{userId}")]
-        public List<Booking> GetBookingsWithUserId(string userId)
+        [Route("GetBookingsByUserId/{userId}")]
+        public List<Booking> GetBookingsByUserId(string userId)
         {
-            return BookingServices.GetAllbookings(userId);
+            return BookingServices.GetBookings(userId);
         }
         [HttpGet]
         [Route("GetAllRidesToStartUsingOfferId/{offerId}")]
@@ -57,10 +57,10 @@ namespace CarPoolApplication.API.Controllers
             return BookingServices.GetAllRidesToStart(offerId);
         }
         [HttpGet]
-        [Route("GetRequestsUsingOfferId/{offerId}")]
-        public List<Booking> GetRequestsUsingOfferId(string offerId)
+        [Route("GetRequestsByOfferId/{offerId}")]
+        public List<Booking> GetRequestsByOfferId(string offerId)
         {
-            return BookingServices.GetRequests(offerId);
+            return BookingServices.GetBookingRequests(offerId);
         }
         [HttpGet]
         [Route("StartRidesUsingOfferId/{offerId}")]
@@ -84,7 +84,7 @@ namespace CarPoolApplication.API.Controllers
         [Route("ApproveRequests/{requestId}/Offer/{offerId}")]
         public bool ApproveRequests(string requestId, string offerId)
         {
-            return BookingServices.ApproveRequests(requestId, offerId);
+            return BookingServices.ApproveBookingRequests(requestId, offerId);
         }
     }
 }
