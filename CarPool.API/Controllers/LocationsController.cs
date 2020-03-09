@@ -39,8 +39,8 @@ namespace CarPoolApplication.API.Controllers
         {
             return locationServices.DeleteLocation(id);       
         }
-        [HttpPut("{id}")]
-        public bool UpdateLocation(string id, Location location)
+        [HttpPut]
+        public bool UpdateLocation(Location location)
         {
           return locationServices.UpdateLocation(location);
         }

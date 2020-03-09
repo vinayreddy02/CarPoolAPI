@@ -9,7 +9,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CarPoolApplication.Services
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CarPoolApplication.DataBase", "CarPoolDataBase\CarPoolApplication.DataBase.csproj", "{4D6FC749-6313-43F4-9D60-979D536103BE}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CarPoolApplication.API", "CarPoolWebAPI\CarPoolApplication.API.csproj", "{8F503354-DFBA-43DA-8A3C-D364C5F1E68C}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CarPoolApplication.API", "CarPool.API\CarPoolApplication.API.csproj", "{1ADBBACE-05E2-4A1F-8CD3-1FC103EB27A4}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -29,10 +29,10 @@ Global
 		{4D6FC749-6313-43F4-9D60-979D536103BE}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{4D6FC749-6313-43F4-9D60-979D536103BE}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{4D6FC749-6313-43F4-9D60-979D536103BE}.Release|Any CPU.Build.0 = Release|Any CPU
-		{8F503354-DFBA-43DA-8A3C-D364C5F1E68C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{8F503354-DFBA-43DA-8A3C-D364C5F1E68C}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{8F503354-DFBA-43DA-8A3C-D364C5F1E68C}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{8F503354-DFBA-43DA-8A3C-D364C5F1E68C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1ADBBACE-05E2-4A1F-8CD3-1FC103EB27A4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1ADBBACE-05E2-4A1F-8CD3-1FC103EB27A4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1ADBBACE-05E2-4A1F-8CD3-1FC103EB27A4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1ADBBACE-05E2-4A1F-8CD3-1FC103EB27A4}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

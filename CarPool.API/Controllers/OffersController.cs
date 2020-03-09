@@ -39,7 +39,7 @@ namespace CarPoolApplication.API.Controllers
         {
             return OfferServices.DeleteOffer(id);         
         }
-        [HttpPut("{id}")]
+        [HttpPut]
         public bool UpdateOffer(Offer offer)
         {
             return OfferServices.UpdateOffer(offer);                      

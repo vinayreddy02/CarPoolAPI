@@ -40,8 +40,8 @@ namespace CarPoolApplication.API.Controllers
         {
             return vehicleServices.DeleteVehicle(id);       
         }
-        [HttpPut("{id}")]
-        public bool UpdateVehicle(string id, Vehicle vehicle)
+        [HttpPut]
+        public bool UpdateVehicle(Vehicle vehicle)
         {
             return vehicleServices.UpdateVehicle(vehicle);               
         }

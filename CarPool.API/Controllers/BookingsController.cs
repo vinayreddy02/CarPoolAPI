@@ -39,7 +39,7 @@ namespace CarPoolApplication.API.Controllers
         {
             return BookingServices.DeleteBooking(id);
         }     
-        [HttpPut("{id}")]
+        [HttpPut]
         public bool UpdateBooking(Booking booking)
         {       
                 return BookingServices.UpdateBooking(booking);               

@@ -39,8 +39,8 @@ namespace CarPoolApplication.API.Controllers
         {
             return UserServices.DeleteUser(id);          
         }
-        [HttpPut("{id}")]
-        public bool UpdateUser(string id, User user)
+        [HttpPut]
+        public bool UpdateUser(User user)
         {
             return UserServices.UpdateUser(user);             
         }

@@ -6,6 +6,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\CarPoolApplication.Services\CarPoolApplication.Services.csproj" />
+    <ProjectReference Include="..\Models\CarPoolApplication.Models.csproj" />
   </ItemGroup>
 
 
