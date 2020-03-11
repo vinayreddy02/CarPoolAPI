@@ -25,7 +25,7 @@ namespace CarPoolApplication.API.Controllers
             return OfferServices.GetAllOffers();
         }
         [HttpPost]
-        public Offer AddOffer(Offer offer)
+        public bool AddOffer(Offer offer)
         {
             return OfferServices.AddOffer(offer);           
         }

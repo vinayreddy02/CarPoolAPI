@@ -25,7 +25,7 @@ namespace CarPoolApplication.API.Controllers
             return UserServices.GetAllUsers();
         }
         [HttpPost]
-        public User AddUser(User user)
+        public bool AddUser(User user)
         {
             return UserServices.AddUser(user);           
         }

@@ -24,6 +24,7 @@ namespace CarPoolApplication.Services
             try
             {
                 return AutoMapping.DbtoModelOffer.Map<List<OfferTable>, List<Offer>>(Context.OfferTable.ToList());
+                
             }
             catch
             {

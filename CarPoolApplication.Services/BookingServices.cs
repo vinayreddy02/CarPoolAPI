@@ -11,26 +11,34 @@ using Microsoft.EntityFrameworkCore;
 
 namespace CarPoolApplication.Services
 {
-   public class BookingServices:IBooKingServices
-    {      
+    public class BookingServices : IBooKingServices
+    {
         readonly CarpoolDBContext Context;
-       readonly IStationServices StationServices;
+        readonly IStationServices StationServices;
         public BookingServices(CarpoolDBContext context, IStationServices stationServices)
         {
             Context = context;
             StationServices = stationServices;
-        }    
+        }
         public List<Booking> GetAllBookings()
         {
-            List<Booking> bookings =AutoMapping.DbtoModelBooking.Map<List<BookingTable>, List<Booking>>(Context.BookingTable.ToList());
-            return bookings;
+            try
+            {
+                Context.BookingTable.ToList();
+                return AutoMapping.DbtoModelBooking.Map<List<BookingTable>, List<Booking>>(Context.BookingTable.ToList());
+            }
+            catch
+            {
+                return null;
+            }
+            
         }
         public bool AddBooking(Booking bookingRequest)
         {
             try
             {
                 Context.BookingTable.Add(AutoMapping.ModelToDbBooking.Map<Booking, BookingTable>(bookingRequest));
-                return Context.SaveChanges() > 0;              
+                return Context.SaveChanges() > 0;
             }
             catch
             {
@@ -67,9 +75,12 @@ namespace CarPoolApplication.Services
                 Context.BookingTable.Remove(Context.BookingTable.FirstOrDefault(request => string.Equals(request.Id, bookingId)));
                 return Context.SaveChanges() > 0;
             }
-            catch
+            catch (Exception ex)
             {
                 return false;
+            }
+            finally
+            { 
             }
         }
         public List<Booking> GetBookingRequests(string offerId)
@@ -82,7 +93,7 @@ namespace CarPoolApplication.Services
             {
                 return null;
             }
-        }        
+        }
         public List<Booking> GetBookings(string userId)
         {
             try
@@ -94,13 +105,13 @@ namespace CarPoolApplication.Services
                 return null;
             }
         }
-        public bool ApproveBookingRequests(string requestID,string offerID)
+        public bool ApproveBookingRequests(string requestID, string offerID)
         {
             try
             {
                 int numberOfPoints;
                 List<Station> stations = StationServices.GetStationsUsingOfferID(offerID);
-                BookingTable request=Context.BookingTable.FirstOrDefault(request => string.Equals(request.Id, requestID));
+                BookingTable request = Context.BookingTable.FirstOrDefault(request => string.Equals(request.Id, requestID));
                 OfferTable offer = Context.OfferTable.FirstOrDefault(offer => string.Equals(offer.Id, offerID));
                 int fromIndex = -1, toIndex = -1;
                 for (int index = 0; index < stations.Count; index++)
@@ -119,13 +130,13 @@ namespace CarPoolApplication.Services
                         {
                             numberOfPoints = stations[toIndex].StationNumber - stations[fromIndex].StationNumber;
 
-                            request.Price = numberOfPoints * offer.CostperPoint* request.NumberOfSeats;
+                            request.Price = numberOfPoints * offer.CostperPoint * request.NumberOfSeats;
                             request.BookingStatus = BookingStatus.confirm.ToString();
                             offer.NumberOfSeats -= request.NumberOfSeats;
                             if (offer.NumberOfSeats == 0)
                             {
                                 offer.OfferStatus = OfferStatus.close.ToString();
-                            }                          
+                            }
                         }
                         fromIndex = -1;
                         toIndex = -1;
@@ -188,5 +199,6 @@ namespace CarPoolApplication.Services
                 return false;
             }
         }
-    } }
+    }
+}
 
