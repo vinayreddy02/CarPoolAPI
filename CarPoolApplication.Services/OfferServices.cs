@@ -7,6 +7,12 @@ using CarPoolApplication.DataBase;
 using  System.Linq;
 using CarPoolApplication.Services.Intefaces;
 using Microsoft.EntityFrameworkCore;
+using AutoMapper.QueryableExtensions;
+using AutoMapper.Mappers;
+using AutoMapper.Execution;
+using AutoMapper.Features;
+using AutoMapper.Internal;
+using AutoMapper.Configuration;
 
 namespace CarPoolApplication.Services
 {
@@ -23,7 +29,8 @@ namespace CarPoolApplication.Services
         {
             try
             {
-                return AutoMapping.DbtoModelOffer.Map<List<OfferTable>, List<Offer>>(Context.OfferTable.ToList());
+                
+                return AutoMapping<OfferTable, Offer>.Mapper.Map<List<OfferTable>, List<Offer>>(Context.OfferTable.ToList());
                 
             }
             catch
@@ -34,8 +41,8 @@ namespace CarPoolApplication.Services
         public bool AddOffer(Offer offer)
         {
             try
-            {
-                Context.OfferTable.Add(AutoMapping.ModelToDbOffer.Map<Offer, OfferTable>(offer));
+            {               
+                Context.OfferTable.Add(AutoMapping<OfferTable, Offer>.Mapper.Map<Offer, OfferTable>(offer));
                 return Context.SaveChanges() > 0;
             }
             catch
@@ -47,7 +54,7 @@ namespace CarPoolApplication.Services
         {
             try
             {
-                Context.Entry(AutoMapping.ModelToDbOffer.Map<Offer, OfferTable>(offer)).State = EntityState.Modified;
+                Context.Entry(AutoMapping<OfferTable, Offer>.Mapper.Map<Offer, OfferTable>(offer)).State = EntityState.Modified;
                 return Context.SaveChanges() > 0;
             }
             catch
@@ -59,7 +66,7 @@ namespace CarPoolApplication.Services
         {
             try
             {
-                return AutoMapping.DbtoModelOffer.Map<List<OfferTable>, List<Offer>>(Context.OfferTable.Where(offer => string.Equals(offer.DriverId, userId) && offer.OfferStatus.Equals(OfferStatus.open)).ToList());
+                return AutoMapping<OfferTable, Offer>.Mapper.Map<List<OfferTable>, List<Offer>>(Context.OfferTable.Where(offer => string.Equals(offer.DriverId, userId) && offer.OfferStatus.Equals(OfferStatus.open)).ToList());
             }
             catch
             {
@@ -83,14 +90,13 @@ namespace CarPoolApplication.Services
                     {
                         if (string.Equals(fromStations[fromIndex].OfferId, toStations[toIndex].OfferId) && fromStations[fromIndex].StationNumber < toStations[toIndex].StationNumber)
                         {
-                            offerTable = Context.OfferTable.FirstOrDefault(offer => string.Equals(offer.Id, fromStations[fromIndex].OfferId));
-                            
+                            offerTable = Context.OfferTable.FirstOrDefault(offer => string.Equals(offer.Id, fromStations[fromIndex].OfferId));                           
                             if (offerTable.OfferStatus.Equals(OfferStatus.open) && (offerTable.NumberOfSeats > numberOfSeats) && (string.Equals(offerTable.DateTime.Date.ToString(), dateTime.Date.ToString())))
                             {
                                 numberOfPoints = toStations[toIndex].StationNumber - fromStations[fromIndex].StationNumber;
                                 offerTable.Price = numberOfPoints * offerTable.CostperPoint;
                                 Context.SaveChanges();
-                                Offer offer= AutoMapping.DbtoModelOffer.Map<OfferTable,Offer>(offerTable);
+                                Offer offer= AutoMapping<OfferTable, Offer>.Mapper.Map<OfferTable,Offer>(offerTable);
                                 AvailableOffers.Add(offer);
                             }
                         }
@@ -121,7 +127,7 @@ namespace CarPoolApplication.Services
         {
             try
             {
-                return AutoMapping.DbtoModelOffer.Map<List<OfferTable>, List<Offer>>(Context.OfferTable.Where(offer => string.Equals(offer.DriverId, userID)).ToList());
+                return AutoMapping<OfferTable, Offer>.Mapper.Map<List<OfferTable>, List<Offer>>(Context.OfferTable.Where(offer => string.Equals(offer.DriverId, userID)).ToList());
             }
             catch
             {
@@ -176,7 +182,7 @@ namespace CarPoolApplication.Services
         {
             try
             {
-                return AutoMapping.DbtoModelOffer.Map<OfferTable, Offer>(Context.OfferTable.FirstOrDefault(offer => string.Equals(offer.Id, offerId)));
+                return AutoMapping<OfferTable, Offer>.Mapper.Map<OfferTable, Offer>(Context.OfferTable.FirstOrDefault(offer => string.Equals(offer.Id, offerId)));
             }
             catch
             {

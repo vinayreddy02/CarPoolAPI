@@ -22,8 +22,8 @@ namespace CarPoolApplication.Services
         public List<Vehicle> GetVehicles()
         {
             try
-            {              
-                return AutoMapping.DbtoModelVehicle.Map<List<VehicleTable>, List<Vehicle>>(Context.VehicleTable.ToList());           
+            {
+                return AutoMapping<VehicleTable,Vehicle>.Mapper.Map<List<VehicleTable>, List<Vehicle>>(Context.VehicleTable.ToList());           
             }
             catch
             {
@@ -34,7 +34,7 @@ namespace CarPoolApplication.Services
         {
             try
             {
-                Context.VehicleTable.Add(AutoMapping.ModelToDbVehicle.Map<Vehicle, VehicleTable>(vehicle));
+                Context.VehicleTable.Add(AutoMapping<VehicleTable, Vehicle>.Mapper.Map<Vehicle, VehicleTable>(vehicle));
                 return Context.SaveChanges() > 0;
             }
             catch
@@ -46,7 +46,7 @@ namespace CarPoolApplication.Services
         {
             try
             {
-                Context.Entry(AutoMapping.ModelToDbVehicle.Map<Vehicle, VehicleTable>(vehicle)).State = EntityState.Modified;
+                Context.Entry(AutoMapping<VehicleTable,Vehicle>.Mapper.Map<Vehicle, VehicleTable>(vehicle)).State = EntityState.Modified;
                 return Context.SaveChanges() > 0;
             }
             catch
@@ -58,7 +58,7 @@ namespace CarPoolApplication.Services
         {
             try
             {
-                return AutoMapping.DbtoModelVehicle.Map<VehicleTable, Vehicle>(Context.VehicleTable.FirstOrDefault(vehicle => string.Equals(vehicle.Id, vehicleId)));   
+                return AutoMapping<VehicleTable,Vehicle>.Mapper.Map<VehicleTable, Vehicle>(Context.VehicleTable.FirstOrDefault(vehicle => string.Equals(vehicle.Id, vehicleId)));   
             }
             catch
             {

@@ -21,8 +21,8 @@ namespace CarPoolApplication.Services
         public List<User> GetAllUsers()
         {
             try
-            {
-                return AutoMapping.DbtoModelUser.Map<List<UserTable>, List<User>>(Context.UserTable.ToList());               
+            {                
+                return AutoMapping<UserTable, User>.Mapper.Map< List<UserTable>, List<User>>(Context.UserTable.ToList());               
             }
             catch
             {
@@ -33,7 +33,7 @@ namespace CarPoolApplication.Services
         {
             try
             {
-                Context.UserTable.Add(AutoMapping.ModelToDbUser.Map<User, UserTable>(user));
+                Context.UserTable.Add(AutoMapping<UserTable, User>.Mapper.Map<User, UserTable>(user));
                 return Context.SaveChanges() > 0;
                
             }
@@ -46,7 +46,7 @@ namespace CarPoolApplication.Services
         {
             try
             {
-                return AutoMapping.DbtoModelUser.Map<UserTable, User>(Context.UserTable.FirstOrDefault(user => string.Equals(user.Id, userId)));               
+                return AutoMapping<UserTable, User>.Mapper.Map<UserTable, User>(Context.UserTable.FirstOrDefault(user => string.Equals(user.Id, userId)));               
             }
             catch
             {
@@ -69,7 +69,7 @@ namespace CarPoolApplication.Services
         {
             try
             {
-                Context.Entry(AutoMapping.ModelToDbUser.Map<User, UserTable>(user)).State = EntityState.Modified;
+                Context.Entry(AutoMapping<UserTable, User>.Mapper.Map<User, UserTable>(user)).State = EntityState.Modified;
                 return Context.SaveChanges() > 0;
             }
             catch

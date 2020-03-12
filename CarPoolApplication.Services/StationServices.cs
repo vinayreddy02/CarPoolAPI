@@ -21,7 +21,7 @@ namespace CarPoolApplication.Services
         {
             try
             {
-                Context.StationTable.Add(AutoMapping.ModelToDbStation.Map<Station, StationTable>(place));
+                Context.StationTable.Add(AutoMapping<Station, StationTable>.Mapper.Map<Station, StationTable>(place));
                 return Context.SaveChanges() > 0;
             }
             catch
@@ -33,7 +33,7 @@ namespace CarPoolApplication.Services
         {
             try
             {
-                Context.Entry(AutoMapping.ModelToDbStation.Map<Station, StationTable>(place)).State = EntityState.Modified;
+                Context.Entry(AutoMapping<Station, StationTable>.Mapper.Map<Station, StationTable>(place)).State = EntityState.Modified;
                 return Context.SaveChanges() > 0;
             }
             catch
@@ -45,7 +45,7 @@ namespace CarPoolApplication.Services
         {
             try
             {
-                return AutoMapping.DbtoModelStation.Map<List<StationTable>, List<Station>>(Context.StationTable.ToList());
+                return AutoMapping<Station, StationTable>.Mapper.Map<List<StationTable>, List<Station>>(Context.StationTable.ToList());
             }
             catch
             {
@@ -56,7 +56,7 @@ namespace CarPoolApplication.Services
         {
             try
             {
-                return AutoMapping.DbtoModelStation.Map<List<StationTable>, List<Station>>(Context.StationTable.Where(station => string.Equals(station.Id, placeID)).ToList());
+                return AutoMapping<Station, StationTable>.Mapper.Map<List<StationTable>, List<Station>>(Context.StationTable.Where(station => string.Equals(station.Id, placeID)).ToList());
             }
             catch
             {
@@ -67,7 +67,7 @@ namespace CarPoolApplication.Services
         {
             try
             {
-                return AutoMapping.DbtoModelStation.Map<List<StationTable>, List<Station>>(Context.StationTable.Where(station => string.Equals(station.OfferId, offerID)).ToList());
+                return AutoMapping<Station, StationTable>.Mapper.Map<List<StationTable>, List<Station>>(Context.StationTable.Where(station => string.Equals(station.OfferId, offerID)).ToList());
             }
             catch
             {
@@ -78,7 +78,7 @@ namespace CarPoolApplication.Services
         {
             try
             {
-                return AutoMapping.DbtoModelStation.Map<StationTable, Station>(Context.StationTable.FirstOrDefault(station => string.Equals(station.Id, stationId)));
+                return AutoMapping<Station, StationTable>.Mapper.Map<StationTable, Station>(Context.StationTable.FirstOrDefault(station => string.Equals(station.Id, stationId)));
             }
             catch
             {

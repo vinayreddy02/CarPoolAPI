@@ -21,7 +21,7 @@ namespace CarPoolApplication.Services
         {
             try
             {
-                Context.LocationTable.Add(AutoMapping.ModelToDbLocation.Map<Location, LocationTable>(place));
+                Context.LocationTable.Add(AutoMapping<LocationTable, Location>.Mapper.Map<Location, LocationTable>(place));
                 return Context.SaveChanges() > 0;
             }
             catch
@@ -33,7 +33,7 @@ namespace CarPoolApplication.Services
         {
             try
             {
-                Context.Entry(AutoMapping.ModelToDbLocation.Map<Location, LocationTable>(place)).State = EntityState.Modified;
+                Context.Entry(AutoMapping<LocationTable, Location>.Mapper.Map<Location, LocationTable>(place)).State = EntityState.Modified;
                 return Context.SaveChanges() > 0;
             }
             catch
@@ -45,7 +45,7 @@ namespace CarPoolApplication.Services
         {
             try
             {
-                return AutoMapping.DbtoModelLocation.Map<List<LocationTable>, List<Location>>(Context.LocationTable.ToList());
+                return AutoMapping<LocationTable, Location>.Mapper.Map<List<LocationTable>, List<Location>>(Context.LocationTable.ToList());
             }
             catch
             {
@@ -56,7 +56,7 @@ namespace CarPoolApplication.Services
         {
             try
             {
-                return AutoMapping.DbtoModelLocation.Map<List<LocationTable>, List<Location>>(Context.LocationTable.Where(location => string.Equals(location.Place, place)).ToList());
+                return AutoMapping<LocationTable, Location>.Mapper.Map<List<LocationTable>, List<Location>>(Context.LocationTable.Where(location => string.Equals(location.Place, place)).ToList());
             }
             catch
             {
@@ -67,7 +67,7 @@ namespace CarPoolApplication.Services
         {
             try
             {
-                return AutoMapping.DbtoModelLocation.Map<LocationTable, Location>(Context.LocationTable.FirstOrDefault(location => string.Equals(location.Id, LocationID)));
+                return AutoMapping<LocationTable, Location>.Mapper.Map<LocationTable, Location>(Context.LocationTable.FirstOrDefault(location => string.Equals(location.Id, LocationID)));
              }
             catch
             {
